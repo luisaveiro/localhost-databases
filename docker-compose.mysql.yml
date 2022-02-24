@@ -1,0 +1,43 @@
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: '3.8'
+
+# Docker services
+services:
+  # Database container
+  mysql:
+    container_name: "${MYSQL_CONTAINER_NAME:-mysql}"
+    # https://hub.docker.com/_/mysql
+    image: mysql:latest
+    # Enable platform for Apple Silicon/M1
+    # platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USERNAME}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    networks:
+      - local
+    ports:
+     - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${MYSQL_ROOT_PASSWORD}"]
+      retries: 3
+      timeout: 5s
+    # Use mysql_native_password instead of caching_sha2_password
+    # command: "--default-authentication-plugin=mysql_native_password"
+
+# Docker networks
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# Docker volumes
+volumes:
+  mysql_data:
+    driver: "local"
+    name: "${MYSQL_CONTAINER_NAME:-mysql}_data"

@@ -228,7 +228,7 @@ docker-compose -f docker-compose.mariadb.yml up -d
 To stop MariaDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mariadb.yml down -d
+docker-compose -f docker-compose.mariadb.yml down
 ```
 
 ##### **Connect to Database**
@@ -301,7 +301,7 @@ docker-compose -f docker-compose.mongodb.yml up -d
 To stop MongoDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mongodb.yml down -d
+docker-compose -f docker-compose.mongodb.yml down
 ```
 
 ##### **Connect to Database**
@@ -369,7 +369,7 @@ docker-compose -f docker-compose.mysql.yml up -d
 To stop MySQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mysql.yml down -d
+docker-compose -f docker-compose.mysql.yml down
 ```
 
 ##### **Connect to Database**
@@ -438,7 +438,7 @@ docker-compose -f docker-compose.pgsql.yml up -d
 To stop PostgreSQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.pgsql.yml down -d
+docker-compose -f docker-compose.pgsql.yml down
 ```
 
 ##### **Connect to Database**
@@ -502,7 +502,7 @@ docker-compose -f docker-compose.redis.yml up -d
 To stop Redis container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.redis.yml down -d
+docker-compose -f docker-compose.redis.yml down
 ```
 
 ##### **Connect to Database**

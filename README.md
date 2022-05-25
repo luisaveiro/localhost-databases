@@ -176,6 +176,7 @@ The following databases are part of this repository's collection:
 
 - MariaDB
 - MongoDB
+- Microsoft SQL Server (MSSQL)
 - MySQL
 - PostgreSQL
 - Redis
@@ -324,6 +325,80 @@ Below is a screenshot of the settings used in TablePlus:
     </a>
     <br>
     <sub><sup>TablePlus settings for MongoDB.</sup></sub>
+</p>
+
+#### <ins>Configuring Microsoft SQL Server (MSSQL)</ins>
+
+[Microsoft SQL Server (MSSQL)](https://www.microsoft.com/en-gb/sql-server/) is a 
+relational database management system developed by Microsoft.
+
+##### **DotEnv Variables**
+
+MSSQL Docker Compose file uses the follow variables from the DotEnv file.
+
+```ini
+#--------------------------------------------------------------------------
+# Microsoft SQL Server (MSSQL) env
+#--------------------------------------------------------------------------
+
+MSSQL_CONTAINER_NAME="${APP_NAME}_mssql"
+
+MSSQL_PORT=1433
+
+MSSQL_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+
+MSSQL_PID="Developer"
+```
+
+**Please note:** The MSSQL password needs to include at least 8 characters of 
+at least three of these four categories: uppercase letters, lowercase letters, 
+numbers and non-alphanumeric symbols.
+
+For a list of available environment variables that MSSQL Docker image 
+supports, you can visit [SQL Docs](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables?view=sql-server-ver15) 
+page.
+
+##### **Start & Stop Docker container**
+
+To start MSSQL container, you can run the following command:
+
+```bash
+docker-compose -f docker-compose.mssql.yml up -d
+```
+
+To stop MSSQL container, you can run the following command:
+
+```bash
+docker-compose -f docker-compose.mssql.yml down
+```
+
+##### **Connect to Database**
+
+To connect to your MSSQL container from your database client, you will 
+need to provide the following settings:
+
+```ini
+HOST=127.0.0.1
+PORT="${MSSQL_PORT}"
+
+USER="sa"
+PASSWORD="${MSSQL_ROOT_PASSWORD}"
+```
+
+**Please note:** The `SA` user is the system administrator account on the MSSQL 
+Server instance that's created during setup.
+
+Below is a screenshot of the settings used in TablePlus:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/tableplus-mssql.png" 
+        alt="TablePlus settings for MSSQL"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>TablePlus settings for MSSQL.</sup></sub>
 </p>
 
 #### <ins>Configuring MySQL</ins>
@@ -579,10 +654,12 @@ $ docker run --rm -it --name backend --network=local_dbs_network -v "$PWD":/usr/
 
 ## FAQ
 
-**Q:** Are you planning to add additional databases, e.g., Microsoft SQL Server & Cassandra?  
+**Q:** Are you planning to add additional databases, e.g., CouchDB & Cassandra?  
 **A:** I don't have a roadmap for adding additional databases to this repository. 
 However, you can suggest a database in the 
-[Discussion section](https://github.com/luisaveiro/localhost-databases/discussions/categories/ideas).
+[Discussion section](https://github.com/luisaveiro/localhost-databases/discussions/categories/ideas) 
+and I will try to include the database as part of the repository's database 
+collection.
 
 
 ## Useful Tips

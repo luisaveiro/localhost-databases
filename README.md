@@ -33,6 +33,7 @@
     <a href="#contributing">Contributing</a> •
     <a href="#security-vulnerabilities">Security Vulnerabilities</a> •
     <a href="#credits">Credits</a> •
+    <a href="#Sponsor">Sponsor</a> •
     <a href="#license">License</a>
 </p>
 
@@ -174,19 +175,21 @@ REDIS_CONTAINER_NAME="${APP_NAME}_redis"
 
 The following databases are part of this repository's collection:
 
-- MariaDB
-- MongoDB
-- Microsoft SQL Server (MSSQL)
-- MySQL
-- PostgreSQL
-- Redis
+- [MariaDB](#config-mariadb)
+- [MongoDB](#config-mongodb)
+- [Microsoft SQL Server (MSSQL)](#config-mssql)
+- [MySQL](#config-mysql)
+- [PostgreSQL](#config-postgres)
+- [Redis](#config-redis)
 
 
 Below I have provided more information on how to configure each database, 
 start the database container and connect to the database via 
 [TablePlus](https://tableplus.com/) app.
 
-#### <ins>Configuring MariaDB</ins>
+---
+
+#### <a id="config-mariadb"></a> <ins>Configuring MariaDB</ins>
 
 [MariaDB](https://mariadb.org/) Server is one of the most popular open source 
 relational databases. It's made by the original developers of MySQL.
@@ -258,7 +261,9 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MariaDB.</sup></sub>
 </p>
 
-#### <ins>Configuring MongoDB</ins>
+---
+
+#### <a id="config-mongodb"></a> <ins>Configuring MongoDB</ins>
 
 [MongoDB](https://www.mongodb.com/) is a source-available cross-platform 
 document-oriented database program. Classified as a NoSQL database program, 
@@ -327,10 +332,15 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MongoDB.</sup></sub>
 </p>
 
-#### <ins>Configuring Microsoft SQL Server (MSSQL)</ins>
+---
+
+#### <a id="config-mssql"></a> <ins>Configuring Microsoft SQL Server (MSSQL)</ins>
 
 [Microsoft SQL Server (MSSQL)](https://www.microsoft.com/en-gb/sql-server/) is a 
 relational database management system developed by Microsoft.
+
+> **Note**
+> : MSSQL is not support on Apple Silicon. There is an open [GitHub issue](https://github.com/microsoft/mssql-docker/issues/734).
 
 ##### **DotEnv Variables**
 
@@ -401,7 +411,9 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MSSQL.</sup></sub>
 </p>
 
-#### <ins>Configuring MySQL</ins>
+---
+
+#### <a id="config-mysql"></a> <ins>Configuring MySQL</ins>
 
 [MySQL](https://www.mysql.com/) is the world's most popular open-source 
 relational database management system (RDBMS).
@@ -473,7 +485,9 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MySQL.</sup></sub>
 </p>
 
-#### <ins>Configuring PostgreSQL</ins>
+---
+
+#### <a id="config-postgres"></a> <ins>Configuring PostgreSQL</ins>
 
 [PostgreSQL](https://www.postgresql.org/), also known as Postgres, is a free 
 and open-source relational database management system emphasizing extensibility 
@@ -544,7 +558,9 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for PostgreSQL.</sup></sub>
 </p>
 
-#### <ins>Configuring Redis</ins>
+---
+
+#### <a id="config-redis"></a> <ins>Configuring Redis</ins>
 
 [Redis](https://redis.io/) is an in-memory data structure store, used as a 
 distributed, in-memory key–value database, cache and message broker, with 
@@ -661,7 +677,6 @@ However, you can suggest a database in the
 and I will try to include the database as part of the repository's database 
 collection.
 
-
 ## Useful Tips
 
 [TablePlus](https://tableplus.com/) is a modern, native tool for database 
@@ -691,6 +706,14 @@ about how to proceed.
 The illustration used in the project is from [unDraw (created by Katerina Limpitsouni)](https://undraw.co/). 
 All product names, logos, brands, trademarks and registered trademarks are 
 property of their respective owners.
+
+## Sponsor
+
+Do you like this project? Support it by donating.
+
+<a href="https://www.buymeacoffee.com/luisaveiro">
+  <img src="./images/bmc-button.svg" alt="Code Review" width="144">
+</a>
 
 ## License
 

@@ -181,7 +181,7 @@ The following databases are part of this repository's collection:
 - [MySQL](#config-mysql)
 - [PostgreSQL](#config-postgres)
 - [Redis](#config-redis)
-
+- [SurrealDB](#config-surrealdb)
 
 Below I have provided more information on how to configure each database, 
 start the database container and connect to the database via 
@@ -619,6 +619,86 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for Redis.</sup></sub>
 </p>
 
+---
+
+#### <a id="config-surrealdb"></a> <ins>Configuring SurrealDB</ins>
+
+[SurrealDB](https://surrealdb.com/), is an innovative NewSQL cloud database, 
+suitable for serverless applications, jamstack applications, single-page 
+applications, and traditional applications.
+
+##### **Environment Variables**
+
+SurrealDB Docker Compose file uses the follow variables from the DotEnv file.
+
+```ini
+#--------------------------------------------------------------------------
+# SurrealDB env
+#--------------------------------------------------------------------------
+
+SURREALDB_CONTAINER_NAME="${APP_NAME}_surrealdb"
+
+SURREALDB_PORT=8000
+
+SURREALDB_USERNAME="${DB_USERNAME}"
+SURREALDB_PASSWORD="${DB_PASSWORD}"
+
+```
+
+##### **Start & Stop Docker container**
+
+To start SurrealDB container, you can run the following command:
+
+```bash
+docker-compose -f docker-compose.surrealdb.yml up -d
+```
+
+To stop SurrealDB container, you can run the following command:
+
+```bash
+docker-compose -f docker-compose.surrealdb.yml down
+```
+
+##### **Connect to Database**
+
+> **Note**
+> : TablePlus currently doesn't support SurrealDB. You can use Postman to run 
+queries on SurrealDB.
+
+You will need to provide the following settings for your HTTP Request:
+
+```ini
+PORT="${SURREALDB_PORT}"
+
+USER="${SURREALDB_USERNAME}"
+PASSWORD="${SURREALDB_PASSWORD}"
+```
+
+Below is a cURL request using the settings:
+
+```bash
+curl --request POST \
+	--header "Content-Type: application/json" \
+	--header "NS: test" \
+	--header "DB: test" \
+	--user "${USERNAME}:${PASSWORD}" \
+	--data "INFO FOR DB;" \
+	http://localhost:${PORT}/sql
+```
+
+Below is a screenshot of the settings used in Postman:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/postman-surrealdb.png" 
+        alt="Postman settings for SurrealDB"
+        width="75%">
+    </a>
+    <br>
+    <sub><sup>Postman settings for SurrealDB.</sup></sub>
+</p>
+
 ## Docker Network
 
 If you wish to attach Docker containers to the database network to allow other 
@@ -681,6 +761,10 @@ collection.
 
 [TablePlus](https://tableplus.com/) is a modern, native tool for database 
 management that supports whole set of relational databases (and some NoSQL).
+
+[Postman](https://www.postman.com/) enables you to easily explore, debug, and 
+test your APIs while also enabling you to define complex API requests for HTTP, 
+REST, SOAP, GraphQL, and WebSockets.
 
 ## Changelog
 

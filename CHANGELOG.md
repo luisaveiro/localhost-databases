@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.3.0] - 2022-09-16
+### Added
+- Docker Compose YAML file for SurrealDB.
+- SurrealDB environment variables to DotEnv example file.
+- Thunder Client as a recommended VS code extension.
+
 ## [v0.2.0] - 2022-05-25
 ### Added
 - Docker Compose YAML file for Microsoft SQL Server (MSSQL).

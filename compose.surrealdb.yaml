@@ -1,17 +1,22 @@
-# Docker compose version https://docs.docker.com/compose/compose-file
-version: '3.8'
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
 
-# Docker services
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
 services:
-  # Database container
+  # The SurrealDB database container.
   surrealdb:
-    container_name: "${SURREALDB_CONTAINER_NAME:-surrealdb}"
     # https://hub.docker.com/r/surrealdb/surrealdb
     image: surrealdb/surrealdb:latest
+    container_name: "${SURREALDB_CONTAINER_NAME:-surrealdb}"
     networks:
       - local
     ports:
-     - "${SURREALDB_PORT:-8000}:8000"
+     - ${SURREALDB_PORT:-8000}:8000
     volumes:
       - surrealdb_data:/data/db
     command: [
@@ -22,13 +27,13 @@ services:
       "file:/data/db"
     ]
 
-# Docker networks
+# The Docker networks.
 networks:
   local:
     driver: "bridge"
     name: ${NETWORK_NAME:-local_dbs_network}
 
-# Docker volumes
+# The Docker volumes.
 volumes:
   surrealdb_data:
     driver: "local"

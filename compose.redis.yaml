@@ -1,0 +1,38 @@
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
+
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
+services:
+  # The Redis database container.
+  redis:
+    # https://hub.docker.com/_/redis
+    image: redis:alpine
+    container_name: "${REDIS_CONTAINER_NAME:-redis}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+      - ${REDIS_PORT:-6379}:6379
+    volumes:
+      - redis_data:/data
+
+# The Docker networks.
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# The Docker volumes.
+volumes:
+  redis_data:
+    driver: "local"
+    name: "${REDIS_CONTAINER_NAME:-redis}_data"

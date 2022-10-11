@@ -1,0 +1,42 @@
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
+
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
+services:
+  # The MongoDB database container.
+  mongodb:
+    # https://hub.docker.com/_/mongo
+    image: mongo:latest
+    container_name: "${MONGO_CONTAINER_NAME:-mongodb}"
+    environment:
+      MONGO_INITDB_DATABASE: "${MONGO_DATABASE}"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_PASSWORD}"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb:27017/test --quiet
+      retries: 3
+      timeout: 5s
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+      - ${MONGO_PORT:-27017}:27017
+    volumes:
+      - mongodb_data:/data/db
+
+# The Docker networks.
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# The Docker volumes.
+volumes:
+  mongodb_data:
+    driver: "local"
+    name: "${MONGO_CONTAINER_NAME:-mongodb}_data"

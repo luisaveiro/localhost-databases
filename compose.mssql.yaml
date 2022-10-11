@@ -1,0 +1,37 @@
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
+
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
+services:
+  # The Microsoft SQL database container.
+  mssql:
+    # https://hub.docker.com/_/microsoft-mssql-server
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: "${MSSQL_CONTAINER_NAME:-mssql}"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${MSSQL_ROOT_PASSWORD}"
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+     - ${MSSQL_PORT:-1433}:1433
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+# The Docker networks.
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# The Docker volumes.
+volumes:
+  mssql_data:
+    driver: "local"
+    name: "${MSSQL_CONTAINER_NAME:-mssql}_data"

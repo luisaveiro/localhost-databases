@@ -1,13 +1,18 @@
-# Docker compose version https://docs.docker.com/compose/compose-file
-version: '3.8'
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
 
-# Docker services
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
 services:
-  # Database container
+  # The MariaDB database container.
   mariadb:
-    container_name: "${MARIADB_CONTAINER_NAME:-mariadb}"
     # https://hub.docker.com/_/mariadb
     image: mariadb:latest
+    container_name: "${MARIADB_CONTAINER_NAME:-mariadb}"
     environment:
       MARIADB_ROOT_HOST: "%"
       MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
@@ -15,24 +20,25 @@ services:
       MARIADB_USER: "${MARIADB_USERNAME}"
       MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
-    networks:
-      - local
-    ports:
-     - "${MARIADB_PORT:-3306}:3306"
-    volumes:
-      - mariadb_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-p${MARIADB_ROOT_PASSWORD}"]
       retries: 3
       timeout: 5s
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+     - ${MARIADB_PORT:-3306}:3306
+    volumes:
+      - mariadb_data:/var/lib/mysql
 
-# Docker networks
+# The Docker networks.
 networks:
   local:
     driver: "bridge"
     name: ${NETWORK_NAME:-local_dbs_network}
 
-# Docker volumes
+# The Docker volumes.
 volumes:
   mariadb_data:
     driver: "local"

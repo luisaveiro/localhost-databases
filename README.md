@@ -14,7 +14,7 @@
 </p>
 
 <h4 align="center">
-    Database Docker containers for local development
+    Collection of Database Docker compose files for local development
 </h4>
 
 <p align="center">
@@ -72,7 +72,7 @@ respective installation guides.
 
 You will need to make sure your system meets the following prerequisites:
 
-- Docker Engine >= 19.03.0
+- Docker Engine >= 20.10.00
 
 This repository utilizes [Docker](https://www.docker.com/) to run Databases, 
 e.g., MySQL. So, before using ***Localhost Databases***, make sure you have 
@@ -132,17 +132,17 @@ DB_PASSWORD=password
 
 After you configure your DotEnv, you can start a database container. Each 
 database has its individual Docker Compose file. You will need to provide 
-the database's Docker Compose file to the `docker-compose` command by 
+the database's Docker Compose file to the `docker compose` command by 
 using the `-f` flag. 
 
 ```bash
-docker-compose -f docker-compose.database-name.yml up -d
+docker compose -f compose.database-name.yaml up -d
 ```
 
-An example of the `docker-compose` command would be as follows:
+An example of the `docker compose` command would be as follows:
 
 ```bash
-docker-compose -f docker-compose.redis.yml up -d
+docker compose -f compose.redis.yaml up -d
 ```
 
 Docker will create the database container with the container name 
@@ -173,8 +173,11 @@ REDIS_CONTAINER_NAME="${APP_NAME}_redis"
 
 ## Databases
 
-The following databases are part of this repository's collection:
+Localhost Databases include 10 database servers. The following databases are 
+part of this repository's collection:
 
+- [Cassandra](#config-cassandra)
+- [DynamoDB Local](#config-dynamodb)
 - [MariaDB](#config-mariadb)
 - [MongoDB](#config-mongodb)
 - [Microsoft SQL Server (MSSQL)](#config-mssql)
@@ -182,10 +185,148 @@ The following databases are part of this repository's collection:
 - [PostgreSQL](#config-postgres)
 - [Redis](#config-redis)
 - [SurrealDB](#config-surrealdb)
+- [YugabyteDB](#config-yugabytedb)
 
 Below I have provided more information on how to configure each database, 
-start the database container and connect to the database via 
-[TablePlus](https://tableplus.com/) app.
+start the database container and connect to the database via a database client 
+app.
+
+---
+
+#### <a id="config-cassandra"></a> <ins>Configuring Cassandra</ins>
+
+[Apache Cassandra](https://cassandra.apache.org) is an open source NoSQL 
+distributed database that manages large amounts of data across commodity 
+servers. It is a decentralized, scalable storage system designed to handle vast 
+volumes of data across multiple commodity servers, providing high availability 
+without a single point of failure.
+
+##### **Environment Variables**
+
+The Cassandra Docker Compose file uses the follow variables from the DotEnv 
+file.
+
+```ini
+#--------------------------------------------------------------------------
+# Cassandra env
+#--------------------------------------------------------------------------
+
+CASSANDRA_CONTAINER_NAME="${APP_NAME}_cassandra"
+
+CASSANDRA_PORT=9042
+```
+
+**Please note:** You are unable to create additional users via the Cassandra 
+Docker image environment variables.
+
+##### **Start & Stop Docker container**
+
+To start the Cassandra Local container, you can run the following command:
+
+```bash
+docker compose -f compose.cassandra.yaml up -d
+```
+
+To stop the Cassandra Local container, you can run the following command:
+
+```bash
+docker compose -f compose.cassandra.yaml down
+```
+
+##### **Connect to Database**
+
+To connect to your Cassandra container from your database client, you will 
+need to provide the following settings:
+
+```ini
+HOST=127.0.0.1
+PORT="${CASSANDRA_PORT}"
+
+USER="cassandra"
+PASSWORD="cassandra"
+```
+
+Please note: The `cassandra` user is the system administrator account on the 
+Cassandra Server instance that's created during setup.
+
+
+Below is a screenshot of the settings used in TablePlus:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/tableplus-cassandra.png" 
+        alt="TablePlus settings for Cassandra"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>TablePlus settings for Cassandra.</sup></sub>
+</p>
+
+---
+
+#### <a id="config-dynamodb"></a> <ins>Configuring DynamoDB Local</ins>
+
+[Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) 
+is a fully managed NoSQL database service that provides fast and predictable 
+performance with seamless scalability. DynamoDB local is a downloadable version 
+of Amazon DynamoDB, you can develop and test applications without accessing the 
+DynamoDB web service.
+
+##### **Environment Variables**
+
+The DynamoDB Local Docker Compose file uses the follow variables from the DotEnv 
+file.
+
+```ini
+#--------------------------------------------------------------------------
+# DynamoDB local env
+#--------------------------------------------------------------------------
+
+DYNAMODB_CONTAINER_NAME="${APP_NAME}_dynamodb"
+
+DYNAMODB_PORT=8000
+```
+
+##### **Start & Stop Docker container**
+
+To start the DynamoDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.dynamodb.yaml up -d
+```
+
+To stop the DynamoDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.dynamodb.yaml down
+```
+
+##### **Connect to Database**
+
+> **Note**
+> : TablePlus currently doesn't support DynamoDB. You can use NoSQL Workbench.
+
+To connect to your DynamoDB Local container from your database client, you will 
+need to provide the following settings:
+
+```ini
+HOST=localhost
+PORT="${DYNAMODB_PORT}"
+```
+
+Below is a screenshot of the settings used in NoSQL Workbench:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/nosql-workbench-dynamodb.png" 
+        alt="NoSQL Workbench settings for DynamoDB Local"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>NoSQL Workbench settings for DynamoDB Local.</sup></sub>
+</p>
 
 ---
 
@@ -196,7 +337,7 @@ relational databases. It's made by the original developers of MySQL.
 
 ##### **Environment Variables**
 
-MariaDB Docker Compose file uses the follow variables from the DotEnv file.
+The MariaDB Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -217,22 +358,22 @@ MARIADB_PASSWORD="${DB_PASSWORD}"
 
 **Please note:** MariaDB allows root's password to be empty.
 
-For a list of available environment variables that MariaDB Docker image 
+For a list of available environment variables that the MariaDB Docker image 
 supports, you can visit [MariaDB Docker Hub](https://hub.docker.com/_/mariadb) 
 page.
 
 ##### **Start & Stop Docker container**
 
-To start MariaDB container, you can run the following command:
+To start the MariaDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mariadb.yml up -d
+docker compose -f compose.mariadb.yaml up -d
 ```
 
-To stop MariaDB container, you can run the following command:
+To stop the MariaDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mariadb.yml down
+docker compose -f compose.mariadb.yaml down
 ```
 
 ##### **Connect to Database**
@@ -271,7 +412,7 @@ MongoDB uses JSON-like documents with optional schemas.
 
 ##### **DotEnv Variables**
 
-MongoDB Docker Compose file uses the follow variables from the DotEnv file.
+The MongoDB Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -292,22 +433,22 @@ MONGO_PASSWORD="${DB_PASSWORD}"
 Docker image environment variables. The Mongo username and password environment 
 variables in the DotEnv are for the root user.
 
-For a list of available environment variables that MongoDB Docker image 
+For a list of available environment variables that the MongoDB Docker image 
 supports, you can visit [MongoDB Docker Hub](https://hub.docker.com/_/mongo) 
 page.
 
 ##### **Start & Stop Docker container**
 
-To start MongoDB container, you can run the following command:
+To start the MongoDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mongodb.yml up -d
+docker compose -f compose.mongodb.yaml up -d
 ```
 
-To stop MongoDB container, you can run the following command:
+To stop the MongoDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mongodb.yml down
+docker compose -f compose.mongodb.yaml down
 ```
 
 ##### **Connect to Database**
@@ -340,11 +481,12 @@ Below is a screenshot of the settings used in TablePlus:
 relational database management system developed by Microsoft.
 
 > **Note**
-> : MSSQL is not support on Apple Silicon. There is an open [GitHub issue](https://github.com/microsoft/mssql-docker/issues/734).
+> : MSSQL is not support on Apple Silicon. There is an open 
+[GitHub issue](https://github.com/microsoft/mssql-docker/issues/734).
 
 ##### **DotEnv Variables**
 
-MSSQL Docker Compose file uses the follow variables from the DotEnv file.
+The MSSQL Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -364,22 +506,22 @@ MSSQL_PID="Developer"
 at least three of these four categories: uppercase letters, lowercase letters, 
 numbers and non-alphanumeric symbols.
 
-For a list of available environment variables that MSSQL Docker image 
+For a list of available environment variables that the MSSQL Docker image 
 supports, you can visit [SQL Docs](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables?view=sql-server-ver15) 
 page.
 
 ##### **Start & Stop Docker container**
 
-To start MSSQL container, you can run the following command:
+To start the MSSQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mssql.yml up -d
+docker compose -f compose.mssql.yaml up -d
 ```
 
-To stop MSSQL container, you can run the following command:
+To stop the MSSQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mssql.yml down
+docker compose -f compose.mssql.yaml down
 ```
 
 ##### **Connect to Database**
@@ -420,7 +562,7 @@ relational database management system (RDBMS).
 
 ##### **DotEnv Variables**
 
-MySQL Docker Compose file uses the follow variables from the DotEnv file.
+The MySQL Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -441,22 +583,22 @@ MYSQL_PASSWORD="${DB_PASSWORD}"
 
 **Please note:** MySQL allows root's password to be empty.
 
-For a list of available environment variables that MySQL Docker image 
+For a list of available environment variables that the MySQL Docker image 
 supports, you can visit [MySQL Docker Hub](https://hub.docker.com/_/mysql) 
 page.
 
 ##### **Start & Stop Docker container**
 
-To start MySQL container, you can run the following command:
+To start the MySQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mysql.yml up -d
+docker compose -f compose.mysql.yaml up -d
 ```
 
-To stop MySQL container, you can run the following command:
+To stop the MySQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.mysql.yml down
+docker compose -f compose.mysql.yaml down
 ```
 
 ##### **Connect to Database**
@@ -495,7 +637,8 @@ and SQL compliance.
 
 ##### **Environment Variables**
 
-PostgreSQL Docker Compose file uses the follow variables from the DotEnv file.
+The PostgreSQL Docker Compose file uses the follow variables from the DotEnv 
+file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -512,22 +655,22 @@ PGSQL_USERNAME="${DB_USERNAME}"
 PGSQL_PASSWORD="${DB_PASSWORD}"
 ```
 
-For a list of available environment variables that PostgreSQL Docker image 
+For a list of available environment variables that the PostgreSQL Docker image 
 supports, you can visit [PostgreSQL Docker Hub](https://hub.docker.com/_/postgres) 
 page.
 
 ##### **Start & Stop Docker container**
 
-To start PostgreSQL container, you can run the following command:
+To start the PostgreSQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.pgsql.yml up -d
+docker compose -f compose.pgsql.yaml up -d
 ```
 
-To stop PostgreSQL container, you can run the following command:
+To stop the PostgreSQL container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.pgsql.yml down
+docker compose -f compose.pgsql.yaml down
 ```
 
 ##### **Connect to Database**
@@ -568,7 +711,7 @@ optional durability.
 
 ##### **Environment Variables**
 
-Redis Docker Compose file uses the follow variables from the DotEnv file.
+The Redis Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -580,20 +723,21 @@ REDIS_CONTAINER_NAME="${APP_NAME}_redis"
 REDIS_PORT=6379
 ```
 
-**Please note:** Redis Docker image doesn't offer additional environment variables.
+**Please note:** The Redis Docker image doesn't offer additional environment 
+variables.
 
 ##### **Start & Stop Docker container**
 
-To start Redis container, you can run the following command:
+To start the Redis container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.redis.yml up -d
+docker compose -f compose.redis.yaml up -d
 ```
 
-To stop Redis container, you can run the following command:
+To stop the Redis container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.redis.yml down
+docker compose -f compose.redis.yaml down
 ```
 
 ##### **Connect to Database**
@@ -623,13 +767,13 @@ Below is a screenshot of the settings used in TablePlus:
 
 #### <a id="config-surrealdb"></a> <ins>Configuring SurrealDB</ins>
 
-[SurrealDB](https://surrealdb.com/), is an innovative NewSQL cloud database, 
-suitable for serverless applications, jamstack applications, single-page 
-applications, and traditional applications.
+[SurrealDB](https://surrealdb.com/), is an innovative NewSQL cloud database 
+suitable for serverless, jamstack, single-page, and traditional applications.
 
 ##### **Environment Variables**
 
-SurrealDB Docker Compose file uses the follow variables from the DotEnv file.
+The SurrealDB Docker Compose file uses the follow variables from the DotEnv 
+file.
 
 ```ini
 #--------------------------------------------------------------------------
@@ -642,21 +786,23 @@ SURREALDB_PORT=8000
 
 SURREALDB_USERNAME="${DB_USERNAME}"
 SURREALDB_PASSWORD="${DB_PASSWORD}"
-
 ```
+
+**Please note:** The SurrealDB Docker image doesn't offer additional environment 
+variables.
 
 ##### **Start & Stop Docker container**
 
-To start SurrealDB container, you can run the following command:
+To start the SurrealDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.surrealdb.yml up -d
+docker compose -f compose.surrealdb.yaml up -d
 ```
 
-To stop SurrealDB container, you can run the following command:
+To stop the SurrealDB container, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose.surrealdb.yml down
+docker compose -f compose.surrealdb.yaml down
 ```
 
 ##### **Connect to Database**
@@ -699,10 +845,131 @@ Below is a screenshot of the settings used in Postman:
     <sub><sup>Postman settings for SurrealDB.</sup></sub>
 </p>
 
+---
+
+#### <a id="config-yugabytedb"></a> <ins>Configuring YugabyteDB</ins>
+
+[YugabyteDB](https://www.yugabyte.com/) is a high-performance distributed SQL 
+database for global, internet-scale apps that need absolute data correctness. 
+It aims to support all PostgreSQL features.
+
+> **Note**
+> : YugabyteDB supports PostgreSQL and Cassandra authentication and connection.
+
+##### **Environment Variables**
+
+The YugabyteDB Docker Compose file uses the follow variables from the DotEnv 
+file.
+
+```ini
+#--------------------------------------------------------------------------
+# YugabyteDB env
+#--------------------------------------------------------------------------
+
+YUGABYTEDB_CONTAINER_NAME="${APP_NAME}_yugabytedb"
+
+YUGABYTEDB_YSQL_PORT=5433
+YUGABYTEDB_YCQL_PORT=9042
+
+YUGABYTEDB_MASTER_PORT=7001
+YUGABYTEDB_TSERVER_PORT=9000
+```
+
+**Please note:** The YugabyteDB Docker image doesn't offer additional 
+environment variables. You are unable to create additional users via the 
+YugabyteDB Docker image environment variables.
+
+**Please note:** MacOS Monterey enables AirPlay receiving by default, which 
+listens on port 7000. This conflicts with YugabyteDB default YB-Master port.
+
+##### **Start & Stop Docker container**
+
+To start the YugabyteDB container, you can run the following command:
+
+```bash
+docker compose -f compose.yugabytedb.yaml up -d
+```
+
+To stop the YugabyteDB container, you can run the following command:
+
+```bash
+docker compose -f compose.yugabytedb.yaml down
+```
+
+##### **Connect to Database (Admin UI)**
+
+YugabyteDB cluster consists of two processes: YB-Master which keeps track of 
+various metadata (list of tables, users, roles, permissions, and so on) and 
+YB-TServer which is responsible for the actual end user requests for data 
+updates and queries.
+
+Each of the processes exposes its own Admin UI that can be used to check the 
+status of the corresponding process, as well as perform certain administrative 
+operations. The YB-Master Admin UI is available at http://localhost:7001 and 
+the YB-TServer Admin UI is available at http://localhost:9000.
+
+##### **Connect to Database (PostgreSQL settings)**
+
+To connect to your YugabyteDB container from your database client using 
+PostgreSQL settings, you will need to provide the following settings:
+
+```ini
+HOST=127.0.0.1
+PORT="${YUGABYTEDB_YSQL_PORT}"
+
+USER="yugabyte"
+PASSWORD="yugabyte"
+```
+
+Please note: The `yugabyte` user is the system administrator account on the 
+YugabyteDB Server instance that's created during setup.
+
+Below is a screenshot of the settings used in TablePlus:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/tableplus-yugabytedb-pgsql.png" 
+        alt="TablePlus settings for YugabyteDB"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>TablePlus settings for YugabyteDB (PostgreSQL settings).</sup></sub>
+</p>
+
+##### **Connect to Database (Cassandra settings)**
+
+To connect to your YugabyteDB container from your database client using 
+Cassandra settings, you will need to provide the following settings:
+
+```ini
+HOST=127.0.0.1
+PORT="${YUGABYTEDB_YCQL_PORT}"
+
+USER="cassandra"
+PASSWORD="cassandra"
+```
+
+Please note: The `cassandra` user is the system administrator account on the 
+YugabyteDB Server instance that's created during setup.
+
+Below is a screenshot of the settings used in TablePlus:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/tableplus-yugabytedb-cassandra.png" 
+        alt="TablePlus settings for YugabyteDB"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>TablePlus settings for YugabyteDB (Cassandra settings).</sup></sub>
+</p>
+
 ## Docker Network
 
-If you wish to attach Docker containers to the database network to allow other 
-containers to access your database. I have outlined the necessary 
+If you wish to attach your Docker containers to the database network to allow 
+other containers to access your database. I have outlined the necessary 
 configuration below both for Docker Compose and Docker CLI approach.
 
 Once your database container is up and running, you will need to configure your 
@@ -758,6 +1025,10 @@ and I will try to include the database as part of the repository's database
 collection.
 
 ## Useful Tips
+
+[NoSQL Workbench](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/workbench.html)
+is an Amazon DynamoDB client that provides data modeling, data visualization, 
+and query development.
 
 [TablePlus](https://tableplus.com/) is a modern, native tool for database 
 management that supports whole set of relational databases (and some NoSQL).

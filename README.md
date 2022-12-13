@@ -177,6 +177,7 @@ Localhost Databases include 10 database servers. The following databases are
 part of this repository's collection:
 
 - [Cassandra](#config-cassandra)
+- [CockroachDB](#config-cockroachdb)
 - [DynamoDB Local](#config-dynamodb)
 - [MariaDB](#config-mariadb)
 - [MongoDB](#config-mongodb)
@@ -249,7 +250,6 @@ PASSWORD="cassandra"
 Please note: The `cassandra` user is the system administrator account on the 
 Cassandra Server instance that's created during setup.
 
-
 Below is a screenshot of the settings used in TablePlus:
 
 <p align="center">
@@ -261,6 +261,89 @@ Below is a screenshot of the settings used in TablePlus:
     </a>
     <br>
     <sub><sup>TablePlus settings for Cassandra.</sup></sub>
+</p>
+
+---
+
+#### <a id="config-cockroachdb"></a> <ins>Configuring CockroachDB</ins>
+
+[CockroachDB](https://www.cockroachlabs.com/) is a distributed database with standard SQL for cloud applications.
+
+##### **Environment Variables**
+
+The CockroachDB Docker Compose file uses the follow variables from the DotEnv 
+file.
+
+```ini
+#--------------------------------------------------------------------------
+# CockroachDB env
+#--------------------------------------------------------------------------
+
+COCKROACHDB_CONTAINER_NAME="${APP_NAME}_cockroachdb"
+
+COCKROACHDB_PORT=26257
+
+COCKROACHDB_UI_PORT=8080
+```
+
+##### **Start & Stop Docker container**
+
+To start the CockroachDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.cockroachdb.yaml up -d
+```
+
+To stop the CockroachDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.cockroachdb.yaml down
+```
+
+##### **Connect to Database**
+
+To connect to your CockroachDB container from your database client, you will 
+need to provide the following settings:
+
+```ini
+HOST=127.0.0.1
+PORT="${COCKROACHDB_PORT}"
+
+USER="root"
+```
+
+Please note: The CockroachDB root user does not have a password.
+
+Below is a screenshot of the settings used in TablePlus:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/tableplus-cockroachdb.png" 
+        alt="TablePlus settings for CockroachDB"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>TablePlus settings for CockroachDB.</sup></sub>
+</p>
+
+##### **Connect to DB Console**
+
+The CockroachDB has a DB Console that gives you insight into the overall health 
+of your cluster as well as the performance of the client workload. Go to 
+http://localhost:8080.
+
+Below is a screenshot of the DB Console:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/browser-cockroachdb.png" 
+        alt="CockroachDB DB Console"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>CockroachDB DB Console.</sup></sub>
 </p>
 
 ---

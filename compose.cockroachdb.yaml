@@ -1,0 +1,36 @@
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
+
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
+services:
+  # The CockroachDB database container.
+  cockroachdb:
+    # https://hub.docker.com/r/cockroachdb/cockroach
+    image: cockroachdb/cockroach:latest
+    container_name: "${COCKROACHDB_CONTAINER_NAME:-cockroachdb}"
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+     - ${COCKROACHDB_PORT:-26257}:26257
+     - ${COCKROACHDB_UI_PORT:-8080}:8080
+    volumes:
+      - cockroachdb_data:/cockroach/cockroach-data
+    command: ["start-single-node", "--insecure"]
+
+# The Docker networks.
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# The Docker volumes.
+volumes:
+  cockroachdb_data:
+    driver: "local"
+    name: "${COCKROACHDB_CONTAINER_NAME:-cockroach}_data"

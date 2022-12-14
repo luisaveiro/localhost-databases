@@ -18,6 +18,7 @@ services:
     # Map the database container exposed port to the host port.
     ports:
      - ${COCKROACHDB_PORT:-26257}:26257
+    # Admin UI
      - ${COCKROACHDB_UI_PORT:-8080}:8080
     volumes:
       - cockroachdb_data:/cockroach/cockroach-data
@@ -33,4 +34,4 @@ networks:
 volumes:
   cockroachdb_data:
     driver: "local"
-    name: "${COCKROACHDB_CONTAINER_NAME:-cockroach}_data"
+    name: "${COCKROACHDB_CONTAINER_NAME:-cockroachdb}_data"

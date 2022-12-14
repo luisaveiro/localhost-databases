@@ -173,7 +173,7 @@ REDIS_CONTAINER_NAME="${APP_NAME}_redis"
 
 ## Databases
 
-Localhost Databases include 10 database servers. The following databases are 
+Localhost Databases include 12 database servers. The following databases are 
 part of this repository's collection:
 
 - [Cassandra](#config-cassandra)
@@ -183,6 +183,7 @@ part of this repository's collection:
 - [MongoDB](#config-mongodb)
 - [Microsoft SQL Server (MSSQL)](#config-mssql)
 - [MySQL](#config-mysql)
+- [Neo4j](#config-neo4j)
 - [PostgreSQL](#config-postgres)
 - [Redis](#config-redis)
 - [SurrealDB](#config-surrealdb)
@@ -708,6 +709,93 @@ Below is a screenshot of the settings used in TablePlus:
     </a>
     <br>
     <sub><sup>TablePlus settings for MySQL.</sup></sub>
+</p>
+
+---
+
+#### <a id="config-neo4j"></a> <ins>Configuring Neo4j</ins>
+
+[Neo4j](https://neo4j.com/) is an open-source, NoSQL, native graph database 
+management system that provides an ACID-compliant transactional backend for 
+your applications that has been publicly available since 2007.
+
+##### **Environment Variables**
+
+The Neo4j Docker Compose file uses the follow variables from the DotEnv file.
+
+```ini
+#--------------------------------------------------------------------------
+# Neo4j env
+#--------------------------------------------------------------------------
+
+NEO4J_CONTAINER_NAME="${APP_NAME}_neo4j"
+
+NEO4J_PORT=7474
+
+NEO4J_BOLT_PORT=7687
+```
+
+Neo4j configuration settings can be provided in the Neo4j Docker Compose file 
+using the following naming scheme:
+
+- Prefix with `NEO4J_`.
+- Underscores must be written twice: `_` is written as `__`.
+- Periods are converted to underscores: `.` is written as `_`.
+
+As an example, `dbms.memory.pagecache.size` could be set by specifying the 
+following argument in Neo4j Docker Compose file:
+
+```yaml
+services:
+  neo4j:
+    image: neo4j:latest
+    environment:
+      NEO4J_dbms_memory_pagecache_size=4G
+```
+
+For a list of available environment variables that the Neo4j Docker image 
+supports, you can visit [Neo4j Configuration Settings](https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/) 
+page.
+
+##### **Start & Stop Docker container**
+
+To start the Neo4j container, you can run the following command:
+
+```bash
+docker compose -f compose.neo4j.yaml up -d
+```
+
+To stop the Neo4j container, you can run the following command:
+
+```bash
+docker compose -f compose.neo4j.yaml down
+```
+
+##### **Connect to Database**
+
+Neo4j Browser is a developer-focused tool that allows you to execute Cypher 
+queries and visualize the results. To connect to your Neo4j container from your 
+browser, you will need to provide the following settings:
+
+```ini
+HOST=localhost
+PORT="${NEO4J_PORT}"
+
+USER="neo4j"
+PASSWORD="neo4j"
+```
+
+Go to http://localhost:7474. Below is a screenshot of the Neo4j Browser:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/browser-neo4j.png" 
+        alt="Neo4j Browser"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>Neo4j Browser.</sup></sub>
 </p>
 
 ---

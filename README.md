@@ -173,12 +173,13 @@ REDIS_CONTAINER_NAME="${APP_NAME}_redis"
 
 ## Databases
 
-Localhost Databases include 12 database servers. The following databases are 
+Localhost Databases include 13 database servers. The following databases are 
 part of this repository's collection:
 
 - [Cassandra](#config-cassandra)
 - [CockroachDB](#config-cockroachdb)
 - [DynamoDB Local](#config-dynamodb)
+- [EdgeDB](#config-edgedb)
 - [MariaDB](#config-mariadb)
 - [MongoDB](#config-mongodb)
 - [Microsoft SQL Server (MSSQL)](#config-mssql)
@@ -410,6 +411,77 @@ Below is a screenshot of the settings used in NoSQL Workbench:
     </a>
     <br>
     <sub><sup>NoSQL Workbench settings for DynamoDB Local.</sup></sub>
+</p>
+
+---
+
+#### <a id="config-edgedb"></a> <ins>Configuring EdgeDB</ins>
+
+[EdgeDB](https://www.edgedb.com) is an open-source database designed as a 
+spiritual successor to SQL and the relational paradigm. Powered by the Postgres 
+query engine.
+
+##### **Environment Variables**
+
+The EdgeDB Docker Compose file uses the follow variables from the DotEnv file.
+
+```ini
+#--------------------------------------------------------------------------
+# EdgeDB env
+#--------------------------------------------------------------------------
+
+EDGEDB_CONTAINER_NAME="${APP_NAME}_edgedb"
+
+EDGEDB_PORT=5656
+
+EDGEDB_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+```
+
+**Please note:** EdgeDB root username is `edgedb`.
+
+For a list of available environment variables that the EdgeDB Docker image 
+supports, you can visit [EdgeDB Documentation](https://www.edgedb.com/docs/reference/environment#ref-reference-environment) 
+page.
+
+##### **Start & Stop Docker container**
+
+To start the EdgeDB container, you can run the following command:
+
+```bash
+docker compose -f compose.edgedb.yaml up -d
+```
+
+To stop the EdgeDB container, you can run the following command:
+
+```bash
+docker compose -f compose.edgedb.yaml down
+```
+
+##### **Connect to Database**
+
+EdgeDB Admin UI is a developer-focused tool that allows you to execute EdgeQL 
+queries and visualize the results. To connect to your EdgeDB container from your 
+browser, you will need to provide the following settings:
+
+```ini
+HOST=localhost
+PORT="${EDGEDB_PORT}"
+
+USER="edgedb"
+PASSWORD="${EDGEDB_ROOT_PASSWORD}"
+```
+
+Go to http://localhost:5656. Below is a screenshot of the EdgeDB Admin UI:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/browser-edgedb.png" 
+        alt="EdgeDB Admin UI"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>EdgeDB Admin UI.</sup></sub>
 </p>
 
 ---

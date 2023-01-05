@@ -1,0 +1,43 @@
+#--------------------------------------------------------------------------
+# ! The Docker Compose file is configured for local environments.
+# ! Do not deploy this Docker Compose file in production environments.
+#--------------------------------------------------------------------------
+
+# Docker compose version https://docs.docker.com/compose/compose-file
+version: "3.9"
+
+# The Docker services.
+services:
+  # The EdgeDB database container.
+  edgedb:
+    # https://hub.docker.com/r/edgedb/edgedb
+    image: edgedb/edgedb:latest
+    container_name: "${EDGEDB_CONTAINER_NAME:-edgedb}"
+    environment:
+      EDGEDB_SERVER_ADMIN_UI: "enabled"
+      EDGEDB_SERVER_PASSWORD: "${EDGEDB_ROOT_PASSWORD}"
+      EDGEDB_SERVER_PORT: ${EDGEDB_PORT:-5656}
+      EDGEDB_SERVER_SECURITY: insecure_dev_mode
+    networks:
+      - local
+    # Map the database container exposed port to the host port.
+    ports:
+      - ${EDGEDB_PORT:-5656}:${EDGEDB_PORT:-5656}
+    volumes:
+      - edgedb_schema:/dbschema
+      - edgedb_data:/var/lib/edgedb/data
+
+# The Docker networks.
+networks:
+  local:
+    driver: "bridge"
+    name: ${NETWORK_NAME:-local_dbs_network}
+
+# The Docker volumes.
+volumes:
+  edgedb_data:
+    driver: "local"
+    name: "${EDGEDB_CONTAINER_NAME:-edgedb}_data"
+  edgedb_schema:
+    driver: "local"
+    name: "${EDGEDB_CONTAINER_NAME:-edgedb}_schema"

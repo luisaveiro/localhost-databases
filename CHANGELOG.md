@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.6.0] - 2023-01-09
+### Added
+- TL;DR section in Readme.
+- Docker Compose YAML file for CouchDB & EdgeDB.
+- CouchDB & EdgeDB environment variables to DotEnv example file.
+
 ## [v0.5.0] - 2022-12-14
 ### Added
 - Docker Compose YAML file for CockroachDB & Neo4j.

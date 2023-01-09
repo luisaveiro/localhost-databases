@@ -18,6 +18,7 @@
 </h4>
 
 <p align="center">
+    <a href="#tldr">TL;DR</a> •
     <a href="#about">About</a> •
     <a href="#disclaimer">Disclaimer</a> •
     <a href="#getting-started">Getting Started</a> •
@@ -36,6 +37,26 @@
     <a href="#Sponsor">Sponsor</a> •
     <a href="#license">License</a>
 </p>
+
+## <a id="tldr"></a> TL;DR
+
+Want to learn or experiment with different database engines without requiring 
+to install additional dependencies? ***Localhost Databases*** is a collection 
+of Docker Compose files for relational and NoSQL databases.
+
+#### Quick Start
+
+1. Clone this repository.
+2. Copy the DotEnv example file to create your DotEnv file and configure your 
+database's credentials and settings.
+3. Starting a database Docker container is simple by providing the `-f` flag 
+for the docker compose command.
+
+##### Docker Compose Command:
+
+```bash
+docker compose -f compose.database-name.yaml up -d
+```
 
 ## About
 
@@ -178,6 +199,7 @@ part of this repository's collection:
 
 - [Cassandra](#config-cassandra)
 - [CockroachDB](#config-cockroachdb)
+- [CouchDB](#config-couchdb)
 - [DynamoDB Local](#config-dynamodb)
 - [EdgeDB](#config-edgedb)
 - [MariaDB](#config-mariadb)
@@ -269,7 +291,8 @@ Below is a screenshot of the settings used in TablePlus:
 
 #### <a id="config-cockroachdb"></a> <ins>Configuring CockroachDB</ins>
 
-[CockroachDB](https://www.cockroachlabs.com/) is a distributed database with standard SQL for cloud applications.
+[CockroachDB](https://www.cockroachlabs.com/) is a distributed database with 
+standard SQL for cloud applications.
 
 ##### **Environment Variables**
 
@@ -346,6 +369,77 @@ Below is a screenshot of the DB Console:
     </a>
     <br>
     <sub><sup>CockroachDB DB Console.</sup></sub>
+</p>
+
+---
+
+#### <a id="config-couchdb"></a> <ins>CouchDB</ins>
+
+[Apache CouchDB](https://couchdb.apache.org/) is an open-source document-oriented 
+NoSQL database, implemented in Erlang. CouchDB uses multiple formats and protocols 
+to store, transfer, and process its data. It uses JSON to store data, JavaScript 
+as its query language using MapReduce, and HTTP for an API.
+
+##### **Environment Variables**
+
+The CouchDB Local Docker Compose file uses the follow variables from the DotEnv 
+file.
+
+```ini
+#--------------------------------------------------------------------------
+# CouchDB env
+#--------------------------------------------------------------------------
+
+COUCHDB_CONTAINER_NAME="${APP_NAME}_couchdb"
+
+COUCHDB_PORT=5984
+
+COUCHDB_USERNAME="${DB_USERNAME}"
+COUCHDB_PASSWORD="${DB_PASSWORD}"
+```
+
+##### **Start & Stop Docker container**
+
+To start the CouchDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.couchdb.yaml up -d
+```
+
+To stop the CouchDB Local container, you can run the following command:
+
+```bash
+docker compose -f compose.couchdb.yaml down
+```
+
+##### **Connect to Database**
+
+Fauxton is a native web-based interface built into CouchDB. It provides a basic 
+interface to the majority of the functionality, including the ability to create, 
+update, delete and view documents and design documents. It provides access to 
+the configuration parameters, and an interface for initiating replication.To 
+connect to your EdgeDB CouchDB from your browser, you will need to provide the 
+following settings:
+
+```ini
+HOST=localhost
+PORT="${COUCHDB_PORT}"
+
+USER="${DB_USERNAME}"
+PASSWORD="${DB_PASSWORD}"
+```
+
+Go to http://localhost:5984/_utils. Below is a screenshot of the Fauxton UI:
+
+<p align="center">
+    <a>
+    <img 
+        src="./images/browser-couchdb.png" 
+        alt="CouchDB Fauxton UI"
+        width="50%">
+    </a>
+    <br>
+    <sub><sup>CouchDB Fauxton UI.</sup></sub>
 </p>
 
 ---

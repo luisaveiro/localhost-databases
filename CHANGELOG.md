@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.6.1] - 2023-01-26
+### Added
+- Fireship YouTube links for Cassandra, MongoDB, Neo4j, Redis and SurrealDB.
+
 ## [v0.6.0] - 2023-01-09
 ### Added
 - TL;DR section in Readme.

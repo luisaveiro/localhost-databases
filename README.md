@@ -226,6 +226,9 @@ servers. It is a decentralized, scalable storage system designed to handle vast
 volumes of data across multiple commodity servers, providing high availability 
 without a single point of failure.
 
+You can learn about [Cassandra in 100 Seconds](https://youtu.be/ziq7FUKpCS8) by 
+watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
+
 ##### **Environment Variables**
 
 The Cassandra Docker Compose file uses the follow variables from the DotEnv 
@@ -660,6 +663,9 @@ Below is a screenshot of the settings used in TablePlus:
 document-oriented database program. Classified as a NoSQL database program, 
 MongoDB uses JSON-like documents with optional schemas.
 
+You can learn about [MongoDB in 100 Seconds](https://youtu.be/-bt_y4Loofg) by 
+watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
+
 ##### **DotEnv Variables**
 
 The MongoDB Docker Compose file uses the follow variables from the DotEnv file.
@@ -885,6 +891,9 @@ Below is a screenshot of the settings used in TablePlus:
 management system that provides an ACID-compliant transactional backend for 
 your applications that has been publicly available since 2007.
 
+You can learn about [Neo4j in 100 Seconds](https://youtu.be/T6L9EoBy8Zk) by 
+watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
+
 ##### **Environment Variables**
 
 The Neo4j Docker Compose file uses the follow variables from the DotEnv file.
@@ -1046,6 +1055,9 @@ Below is a screenshot of the settings used in TablePlus:
 distributed, in-memory key–value database, cache and message broker, with 
 optional durability.
 
+You can learn about [Redis in 100 Seconds](https://youtu.be/G1rOthIU-uo) by 
+watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
+
 ##### **Environment Variables**
 
 The Redis Docker Compose file uses the follow variables from the DotEnv file.
@@ -1106,6 +1118,9 @@ Below is a screenshot of the settings used in TablePlus:
 
 [SurrealDB](https://surrealdb.com/), is an innovative NewSQL cloud database 
 suitable for serverless, jamstack, single-page, and traditional applications.
+
+You can learn about [SurrealDB in 100 Seconds](https://youtu.be/C7WFwgDRStM) by 
+watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ##### **Environment Variables**
 

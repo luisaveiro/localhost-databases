@@ -217,8 +217,10 @@ start the database container and connect to the database via a database client
 app.
 
 ---
+<details>
+<summary><a id="config-cassandra"><b>Cassandra</b></a></summary>
 
-#### <a id="config-cassandra"></a> <ins>Configuring Cassandra</ins>
+#### <ins>Configuring Cassandra</ins>
 
 [Apache Cassandra](https://cassandra.apache.org) is an open source NoSQL 
 distributed database that manages large amounts of data across commodity 
@@ -290,9 +292,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for Cassandra.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-cockroachdb"></a> <ins>Configuring CockroachDB</ins>
+<details>
+<summary><a id="config-cockroachdb"><b>CockroachDB</b></a></summary>
+
+#### <ins>Configuring CockroachDB</ins>
 
 [CockroachDB](https://www.cockroachlabs.com/) is a distributed database with 
 standard SQL for cloud applications.
@@ -374,9 +381,14 @@ Below is a screenshot of the DB Console:
     <sub><sup>CockroachDB DB Console.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-couchdb"></a> <ins>CouchDB</ins>
+<details>
+<summary><a id="config-couchdb"><b>CouchDB</b></a></summary>
+
+#### <ins>CouchDB</ins>
 
 [Apache CouchDB](https://couchdb.apache.org/) is an open-source document-oriented 
 NoSQL database, implemented in Erlang. CouchDB uses multiple formats and protocols 
@@ -445,9 +457,14 @@ Go to http://localhost:5984/_utils. Below is a screenshot of the Fauxton UI:
     <sub><sup>CouchDB Fauxton UI.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-dynamodb"></a> <ins>Configuring DynamoDB Local</ins>
+<details>
+<summary><a id="config-dynamodb"><b>DynamoDB Local</b></a></summary>
+
+#### <ins>Configuring DynamoDB Local</ins>
 
 [Amazon DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) 
 is a fully managed NoSQL database service that provides fast and predictable 
@@ -510,9 +527,14 @@ Below is a screenshot of the settings used in NoSQL Workbench:
     <sub><sup>NoSQL Workbench settings for DynamoDB Local.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-edgedb"></a> <ins>Configuring EdgeDB</ins>
+<details>
+<summary><a id="config-edgedb"><b>EdgeDB</b></a></summary>
+
+#### <ins>Configuring EdgeDB</ins>
 
 [EdgeDB](https://www.edgedb.com) is an open-source database designed as a 
 spiritual successor to SQL and the relational paradigm. Powered by the Postgres 
@@ -581,9 +603,14 @@ Go to http://localhost:5656. Below is a screenshot of the EdgeDB Admin UI:
     <sub><sup>EdgeDB Admin UI.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-mariadb"></a> <ins>Configuring MariaDB</ins>
+<details>
+<summary><a id="config-mariadb"><b>MariaDB</b></a></summary>
+
+#### <ins>Configuring MariaDB</ins>
 
 [MariaDB](https://mariadb.org/) Server is one of the most popular open source 
 relational databases. It's made by the original developers of MySQL.
@@ -655,9 +682,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MariaDB.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-mongodb"></a> <ins>Configuring MongoDB</ins>
+<details>
+<summary><a id="config-mongodb"><b>MongoDB</b></a></summary>
+
+#### <ins>Configuring MongoDB</ins>
 
 [MongoDB](https://www.mongodb.com/) is a source-available cross-platform 
 document-oriented database program. Classified as a NoSQL database program, 
@@ -729,9 +761,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MongoDB.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-mssql"></a> <ins>Configuring Microsoft SQL Server (MSSQL)</ins>
+<details>
+<summary><a id="config-mssql"><b>Microsoft SQL Server (MSSQL)</b></a></summary>
+
+#### <ins>Configuring Microsoft SQL Server (MSSQL)</ins>
 
 [Microsoft SQL Server (MSSQL)](https://www.microsoft.com/en-gb/sql-server/) is a 
 relational database management system developed by Microsoft.
@@ -809,9 +846,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MSSQL.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-mysql"></a> <ins>Configuring MySQL</ins>
+<details>
+<summary><a id="config-mysql"><b>MySQL</b></a></summary>
+
+#### <ins>Configuring MySQL</ins>
 
 [MySQL](https://www.mysql.com/) is the world's most popular open-source 
 relational database management system (RDBMS).
@@ -883,9 +925,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for MySQL.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-neo4j"></a> <ins>Configuring Neo4j</ins>
+<details>
+<summary><a id="config-neo4j"><b>Neo4j</b></a></summary>
+
+#### <ins>Configuring Neo4j</ins>
 
 [Neo4j](https://neo4j.com/) is an open-source, NoSQL, native graph database 
 management system that provides an ACID-compliant transactional backend for 
@@ -973,9 +1020,14 @@ Go to http://localhost:7474. Below is a screenshot of the Neo4j Browser:
     <sub><sup>Neo4j Browser.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-postgres"></a> <ins>Configuring PostgreSQL</ins>
+<details>
+<summary><a id="config-postgres"><b>PostgreSQL</b></a></summary>
+
+#### <ins>Configuring PostgreSQL</ins>
 
 [PostgreSQL](https://www.postgresql.org/), also known as Postgres, is a free 
 and open-source relational database management system emphasizing extensibility 
@@ -1047,9 +1099,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for PostgreSQL.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-redis"></a> <ins>Configuring Redis</ins>
+<details>
+<summary><a id="config-redis"><b>Redis</b></a></summary>
+
+#### <ins>Configuring Redis</ins>
 
 [Redis](https://redis.io/) is an in-memory data structure store, used as a 
 distributed, in-memory key–value database, cache and message broker, with 
@@ -1112,9 +1169,14 @@ Below is a screenshot of the settings used in TablePlus:
     <sub><sup>TablePlus settings for Redis.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-surrealdb"></a> <ins>Configuring SurrealDB</ins>
+<details>
+<summary><a id="config-surrealdb"><b>SurrealDB</b></a></summary>
+
+#### <ins>Configuring SurrealDB</ins>
 
 [SurrealDB](https://surrealdb.com/), is an innovative NewSQL cloud database 
 suitable for serverless, jamstack, single-page, and traditional applications.
@@ -1197,9 +1259,14 @@ Below is a screenshot of the settings used in Postman:
     <sub><sup>Postman settings for SurrealDB.</sup></sub>
 </p>
 
+</details>
+
 ---
 
-#### <a id="config-yugabytedb"></a> <ins>Configuring YugabyteDB</ins>
+<details>
+<summary><a id="config-yugabytedb"><b>YugabyteDB</b></a></summary>
+
+#### <ins>Configuring YugabyteDB</ins>
 
 [YugabyteDB](https://www.yugabyte.com/) is a high-performance distributed SQL 
 database for global, internet-scale apps that need absolute data correctness. 
@@ -1317,6 +1384,10 @@ Below is a screenshot of the settings used in TablePlus:
     <br>
     <sub><sup>TablePlus settings for YugabyteDB (Cassandra settings).</sup></sub>
 </p>
+
+</details>
+
+---
 
 ## Docker Network
 

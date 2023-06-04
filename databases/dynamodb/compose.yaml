@@ -6,18 +6,21 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The DynamoDB local database container.
   dynamodb:
     # https://hub.docker.com/r/amazon/dynamodb-local
     image: amazon/dynamodb-local:latest
-    container_name: "${DYNAMODB_CONTAINER_NAME:-dynamodb}"
+    container_name: "${DB_CONTAINER_NAME:-dynamodb}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${DYNAMODB_PORT:-8000}:8000
+     - ${DB_PORT:-8000}:8000
     user: root
     volumes:
       - dynamodb_data:/home/dynamodblocal/data
@@ -34,4 +37,4 @@ networks:
 volumes:
   dynamodb_data:
     driver: "local"
-    name: "${DYNAMODB_CONTAINER_NAME:-dynamodb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-dynamodb_data}"

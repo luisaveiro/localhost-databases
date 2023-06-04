@@ -6,13 +6,16 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The Redis database container.
   redis:
     # https://hub.docker.com/_/redis
     image: redis:alpine
-    container_name: "${REDIS_CONTAINER_NAME:-redis}"
+    container_name: "${DB_CONTAINER_NAME:-redis_db}"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       retries: 3
@@ -21,9 +24,9 @@ services:
       - local
     # Map the database container exposed port to the host port.
     ports:
-      - ${REDIS_PORT:-6379}:6379
+      - ${DB_PORT:-6379}:6379
     volumes:
-      - redis_data:/data
+      - redis_db_data:/data
 
 # The Docker networks.
 networks:
@@ -33,6 +36,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  redis_data:
+  redis_db_data:
     driver: "local"
-    name: "${REDIS_CONTAINER_NAME:-redis}_data"
+    name: "${DB_VOLUME_DATA_NAME:-redis_db_data}"

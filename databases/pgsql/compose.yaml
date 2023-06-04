@@ -6,22 +6,25 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The PostgreSQL database container.
   pgsql:
     # https://hub.docker.com/_/postgres
     image: postgres:latest
-    container_name: "${PGSQL_CONTAINER_NAME:-pgsql}"
+    container_name: "${DB_CONTAINER_NAME:-pgsql_db}"
     environment:
-      POSTGRES_USER: "${PGSQL_USERNAME}"
-      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
-      POSTGRES_DB: "${PGSQL_DATABASE}"
+      POSTGRES_DB: "${DB_DATABASE:-local}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
     healthcheck:
       test: [
         "CMD", "pg_isready", "-q",
-        "-d", "${PGSQL_DATABASE}",
-        "-U", "${PGSQL_USERNAME}"
+        "-d", "${DB_DATABASE:-local}",
+        "-U", "${DB_USERNAME}"
       ]
       retries: 3
       timeout: 5s
@@ -29,9 +32,9 @@ services:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${PGSQL_PORT:-5432}:5432
+     - ${DB_PORT:-5432}:5432
     volumes:
-      - pgsql_data:/var/lib/postgresql/data
+      - pgsql_db_data:/var/lib/postgresql/data
 
 # The Docker networks.
 networks:
@@ -41,6 +44,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  pgsql_data:
+  pgsql_db_data:
     driver: "local"
-    name: "${PGSQL_CONTAINER_NAME:-pgsql}_data"
+    name: "${DB_VOLUME_DATA_NAME:-pgsql_db_data}"

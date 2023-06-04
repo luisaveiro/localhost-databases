@@ -6,22 +6,25 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The YugabyteDB database container.
   yugabytedb:
     # https://hub.docker.com/r/yugabytedb/yugabyte
     image: yugabytedb/yugabyte:latest
-    container_name: "${YUGABYTEDB_CONTAINER_NAME:-yugabytedb}"
+    container_name: "${DB_CONTAINER_NAME:-yugabytedb}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${YUGABYTEDB_YSQL_PORT:-5433}:5433
-     - ${YUGABYTEDB_YCQL_PORT:-9042}:9042
+     - ${DB_YSQL_PORT:-5433}:5433
+     - ${DB_YCQL_PORT:-9042}:9042
     # Admin UI
-     - ${YUGABYTEDB_MASTER_PORT:-7001}:7000
-     - ${YUGABYTEDB_TSERVER_PORT:-9000}:9000
+     - ${DB_MASTER_PORT:-7001}:7000
+     - ${DB_TSERVER_PORT:-9000}:9000
     volumes:
       - yugabytedb_data:/home/yugabyte/yb_data
     command: [
@@ -40,4 +43,4 @@ networks:
 volumes:
   yugabytedb_data:
     driver: "local"
-    name: "${YUGABYTEDB_CONTAINER_NAME:-yugabytedb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-yugabytedb_data}"

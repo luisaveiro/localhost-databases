@@ -6,24 +6,27 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The SurrealDB database container.
   surrealdb:
     # https://hub.docker.com/r/surrealdb/surrealdb
     image: surrealdb/surrealdb:latest
-    container_name: "${SURREALDB_CONTAINER_NAME:-surrealdb}"
+    container_name: "${DB_CONTAINER_NAME:-surrealdb}"
     networks:
       - local
     ports:
-     - ${SURREALDB_PORT:-8000}:8000
+     - ${DB_PORT:-8000}:8000
     volumes:
       - surrealdb_data:/data/db
     command: [
       "start",
       "--log", "full",
-      "--user", "${SURREALDB_USERNAME}",
-      "--pass", "${SURREALDB_PASSWORD}",
+      "--user", "${DB_USERNAME}",
+      "--pass", "${DB_PASSWORD}",
       "file:/data/db"
     ]
 
@@ -37,4 +40,4 @@ networks:
 volumes:
   surrealdb_data:
     driver: "local"
-    name: "${SURREALDB_CONTAINER_NAME:-surrealdb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-surrealdb_data}"

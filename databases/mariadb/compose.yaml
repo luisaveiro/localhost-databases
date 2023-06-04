@@ -6,29 +6,32 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The MariaDB database container.
   mariadb:
     # https://hub.docker.com/_/mariadb
     image: mariadb:latest
-    container_name: "${MARIADB_CONTAINER_NAME:-mariadb}"
+    container_name: "${DB_CONTAINER_NAME:-mariadb}"
     environment:
       MARIADB_ROOT_HOST: "%"
-      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
-      MARIADB_DATABASE: "${MARIADB_DATABASE}"
-      MARIADB_USER: "${MARIADB_USERNAME}"
-      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MARIADB_DATABASE: "${DB_DATABASE}"
+      MARIADB_USER: "${DB_USERNAME}"
+      MARIADB_PASSWORD: "${DB_PASSWORD}"
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${MARIADB_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_ROOT_PASSWORD}"]
       retries: 3
       timeout: 5s
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${MARIADB_PORT:-3306}:3306
+     - ${DB_PORT:-3306}:3306
     volumes:
       - mariadb_data:/var/lib/mysql
 
@@ -42,4 +45,4 @@ networks:
 volumes:
   mariadb_data:
     driver: "local"
-    name: "${MARIADB_CONTAINER_NAME:-mariadb}_data"
+    name: "${DB_VOLUME_NAME:-mariadb_data}"

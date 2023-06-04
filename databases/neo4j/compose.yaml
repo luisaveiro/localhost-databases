@@ -6,22 +6,25 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The Neo4j database container.
   neo4j:
     # https://hub.docker.com/_/neo4j
     image: neo4j:latest
-    container_name: "${NEO4J_CONTAINER_NAME:-neo4j}"
+    container_name: "${DB_CONTAINER_NAME:-neo4j_db}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${NEO4J_PORT:-7474}:7474
-     - ${NEO4J_BOLT_PORT:-7687}:7687
+     - ${DB_PORT:-7474}:7474
+     - ${DB_BOLT_PORT:-7687}:7687
     volumes:
-      - neo4j_data:/data
-      - neo4j_logs:/logs
+      - neo4j_db_data:/data
+      - neo4j_db_logs:/logs
 
 # The Docker networks.
 networks:
@@ -31,9 +34,9 @@ networks:
 
 # The Docker volumes.
 volumes:
-  neo4j_data:
+  neo4j_db_data:
     driver: "local"
-    name: "${NEO4J_CONTAINER_NAME:-neo4j}_data"
-  neo4j_logs:
+    name: "${DB_VOLUME_DATA_NAME:-neo4j_db_data}"
+  neo4j_db_logs:
     driver: "local"
-    name: "${NEO4J_CONTAINER_NAME:-neo4j}_logs"
+    name: "${DB_VOLUME_LOGS_NAME:-neo4j_db_logs}"

@@ -47,15 +47,15 @@ of Docker Compose files for relational and NoSQL databases.
 #### Quick Start
 
 1. Clone this repository.
+2. The Database Docker Compose files are located in the `databases` folder.
 2. Copy the DotEnv example file to create your DotEnv file and configure your 
 database's credentials and settings.
-3. Starting a database Docker container is simple by providing the `-f` flag 
-for the docker compose command.
+3. Starting a database Docker container is simple by running the `docker compose up` command.
 
 ##### Docker Compose Command:
 
 ```bash
-docker compose -f compose.database-name.yaml up -d
+$ docker compose up -d
 ```
 
 ## About
@@ -121,53 +121,65 @@ Before you start a database in a Docker container, you will need to create a
 DotEnv file. The DotEnv file will allow you to configure your database's 
 credentials and map a container's port.
 
-***Localhost Databases*** includes a `.env.example` file. You can run the 
-following command in the terminal to create your DotEnv file.
+***Localhost Databases*** includes a `.env.example` file for each Database. You 
+can run the following command in the terminal to create your DotEnv file.
 
 ```bash
+# Navigate to a database.
+$ cd databases/mysql
+
 # Create .env from .env.example.
 $ cp .env.example .env
 ```
 
 Each database has its environment variables (below, I have provided more information). 
 You have the option to modify each of the database's environment variables 
-individually, or you can edit the referenced `Database` environment variables 
-(prefixed with `DB_`).
+individually.
 
 ```ini
 #--------------------------------------------------------------------------
-# Global Database env
+# Database (MySQL) env
 #--------------------------------------------------------------------------
 
-DB_DATABASE=local
+# The MySQL database container name. | default: mysql_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
 
+# The MySQL database configuration. | default: local
+DB_DATABASE="local"
+
+# The MySQL database root credentials.
+DB_ROOT_PASSWORD=""
+
+# The MySQL database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+# Map the database container exposed port to the host port. | default: 3306
 DB_PORT=3306
-
-DB_ROOT_PASSWORD=secret
-
-DB_USERNAME=luisaveiro
-DB_PASSWORD=password
 ```
 
 #### 2. <ins>Start database container</ins>
 
 After you configure your DotEnv, you can start a database container. Each 
-database has its individual Docker Compose file. You will need to provide 
-the database's Docker Compose file to the `docker compose` command by 
-using the `-f` flag. 
+database has its individual Docker Compose file. You can run the Docker Compose
+`up` command.
 
 ```bash
-docker compose -f compose.database-name.yaml up -d
+$ docker compose up -d
 ```
 
 An example of the `docker compose` command would be as follows:
 
 ```bash
-docker compose -f compose.redis.yaml up -d
+# Navigate to a database.
+$ cd databases/redis
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 Docker will create the database container with the container name 
-`local_dbs_redis` in our example. The container will be attached to a network 
+`redis_db` in our example. The container will be attached to a network 
 called `local_dbs_network`.
 
 If you want to change the container name or network name, you can edit the 
@@ -176,20 +188,18 @@ the DotEnv variables.
 
 ```ini
 #--------------------------------------------------------------------------
-# Docker env
+# Database (Redis) env
 #--------------------------------------------------------------------------
 
-# Project name
-APP_NAME="local_dbs"
-
-# Docker containers network
-NETWORK_NAME="${APP_NAME}_network"
+# The Redis database container name. | default: redis_db
+DB_CONTAINER_NAME="redis_db"
 
 #--------------------------------------------------------------------------
-# Redis env
+# Network env
 #--------------------------------------------------------------------------
 
-REDIS_CONTAINER_NAME="${APP_NAME}_redis"
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
 ```
 
 ## Databases
@@ -238,12 +248,35 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# Cassandra env
+# Docker env
 #--------------------------------------------------------------------------
 
-CASSANDRA_CONTAINER_NAME="${APP_NAME}_cassandra"
+# The project name. | default: cassandra
+APP_NAME="cassandra"
 
-CASSANDRA_PORT=9042
+#--------------------------------------------------------------------------
+# Database (Cassandra) env
+#--------------------------------------------------------------------------
+
+# The Cassandra database container name. | default: cassandra_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 9042
+DB_PORT=9042
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: cassandra_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** You are unable to create additional users via the Cassandra 
@@ -254,13 +287,17 @@ Docker image environment variables.
 To start the Cassandra Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.cassandra.yaml up -d
+# Navigate to Cassandra database.
+$ cd databases/cassandra
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the Cassandra Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.cassandra.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -270,7 +307,7 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${CASSANDRA_PORT}"
+PORT="${DB_PORT}"
 
 USER="cassandra"
 PASSWORD="cassandra"
@@ -311,14 +348,38 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# CockroachDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-COCKROACHDB_CONTAINER_NAME="${APP_NAME}_cockroachdb"
+# The project name. | default: cockroachdb
+APP_NAME="cockroachdb"
 
-COCKROACHDB_PORT=26257
+#--------------------------------------------------------------------------
+# Database (CockroachDB) env
+#--------------------------------------------------------------------------
 
-COCKROACHDB_UI_PORT=8080
+# The CockroachDB database container name. | default: cockroachdb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 26257
+DB_PORT=26257
+
+# Map the database container UI port to the host port. | default: 8080
+DB_UI_PORT=8080
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: cockroachdb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 ##### **Start & Stop Docker container**
@@ -326,13 +387,17 @@ COCKROACHDB_UI_PORT=8080
 To start the CockroachDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.cockroachdb.yaml up -d
+# Navigate to CockroachDB database.
+$ cd databases/cockroachdb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the CockroachDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.cockroachdb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -342,7 +407,7 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${COCKROACHDB_PORT}"
+PORT="${DB_PORT}"
 
 USER="root"
 ```
@@ -402,15 +467,39 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# CouchDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-COUCHDB_CONTAINER_NAME="${APP_NAME}_couchdb"
+# The project name. | default: couchdb
+APP_NAME="couchdb"
 
-COUCHDB_PORT=5984
+#--------------------------------------------------------------------------
+# Database (CouchDB) env
+#--------------------------------------------------------------------------
 
-COUCHDB_USERNAME="${DB_USERNAME}"
-COUCHDB_PASSWORD="${DB_PASSWORD}"
+# The CouchDB database container name. | default: couchdb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+# The CouchDB database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 5984
+DB_PORT=5984
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: couchdb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 ##### **Start & Stop Docker container**
@@ -418,13 +507,17 @@ COUCHDB_PASSWORD="${DB_PASSWORD}"
 To start the CouchDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.couchdb.yaml up -d
+# Navigate to CouchDB database.
+$ cd databases/couchdb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the CouchDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.couchdb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -438,7 +531,7 @@ following settings:
 
 ```ini
 HOST=localhost
-PORT="${COUCHDB_PORT}"
+PORT="${DB_PORT}"
 
 USER="${DB_USERNAME}"
 PASSWORD="${DB_PASSWORD}"
@@ -479,12 +572,35 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# DynamoDB local env
+# Docker env
 #--------------------------------------------------------------------------
 
-DYNAMODB_CONTAINER_NAME="${APP_NAME}_dynamodb"
+# The project name. | default: dynamodb
+APP_NAME="dynamodb"
 
-DYNAMODB_PORT=8000
+#--------------------------------------------------------------------------
+# Database (DynamoDB) env
+#--------------------------------------------------------------------------
+
+# The DynamoDB database container name. | default: dynamodb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 8000
+DB_PORT=8000
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: dynamodb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 ##### **Start & Stop Docker container**
@@ -492,13 +608,17 @@ DYNAMODB_PORT=8000
 To start the DynamoDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.dynamodb.yaml up -d
+# Navigate to DynamoDB database.
+$ cd databases/dynamodb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the DynamoDB Local container, you can run the following command:
 
 ```bash
-docker compose -f compose.dynamodb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -511,7 +631,7 @@ need to provide the following settings:
 
 ```ini
 HOST=localhost
-PORT="${DYNAMODB_PORT}"
+PORT="${DB_PORT}"
 ```
 
 Below is a screenshot of the settings used in NoSQL Workbench:
@@ -546,14 +666,41 @@ The EdgeDB Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# EdgeDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-EDGEDB_CONTAINER_NAME="${APP_NAME}_edgedb"
+# The project name. | default: edgedb
+APP_NAME="edgedb"
 
-EDGEDB_PORT=5656
+#--------------------------------------------------------------------------
+# Database (EdgeDB) env
+#--------------------------------------------------------------------------
 
-EDGEDB_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+# The EdgeDB database container name. | default: edgedb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+# The EdgeDB database root credentials.
+DB_ROOT_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 5656
+DB_PORT=5656
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: edgedb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
+
+# The database container schema volume. | default: edgedb_schema
+DB_VOLUME_SCHEMA_NAME="${DB_CONTAINER_NAME}_schema"
 ```
 
 **Please note:** EdgeDB root username is `edgedb`.
@@ -567,13 +714,17 @@ page.
 To start the EdgeDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.edgedb.yaml up -d
+# Navigate to EdgeDB database.
+$ cd databases/edgedb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the EdgeDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.edgedb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -584,10 +735,10 @@ browser, you will need to provide the following settings:
 
 ```ini
 HOST=localhost
-PORT="${EDGEDB_PORT}"
+PORT="${DB_PORT}"
 
 USER="edgedb"
-PASSWORD="${EDGEDB_ROOT_PASSWORD}"
+PASSWORD="${DB_ROOT_PASSWORD}"
 ```
 
 Go to http://localhost:5656. Below is a screenshot of the EdgeDB Admin UI:
@@ -621,19 +772,45 @@ The MariaDB Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# MariaDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-MARIADB_CONTAINER_NAME="${APP_NAME}_mariadb"
+# The project name. | default: mariadb
+APP_NAME="mariadb"
 
-MARIADB_DATABASE="${DB_DATABASE}"
+#--------------------------------------------------------------------------
+# Database (MariaDB) env
+#--------------------------------------------------------------------------
 
-MARIADB_PORT="${DB_PORT}"
+# The MariaDB database container name. | default: mariadb
+DB_CONTAINER_NAME="${APP_NAME}"
 
-MARIADB_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+# The MariaDB database configuration. | default: local
+DB_DATABASE=local
 
-MARIADB_USERNAME="${DB_USERNAME}"
-MARIADB_PASSWORD="${DB_PASSWORD}"
+# The MariaDB database root credentials.
+DB_ROOT_PASSWORD=""
+
+# The MariaDB database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 3306
+DB_PORT=3306
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: mariadb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** MariaDB allows root's password to be empty.
@@ -647,13 +824,17 @@ page.
 To start the MariaDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.mariadb.yaml up -d
+# Navigate to MariaDB database.
+$ cd databases/mariadb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the MariaDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.mariadb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -663,10 +844,10 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${MARIADB_PORT}"
+PORT="${DB_PORT}"
 
-USER="${MARIADB_USERNAME}"
-PASSWORD="${MARIADB_PASSWORD}"
+USER="${DB_USERNAME}"
+PASSWORD="${DB_PASSWORD}"
 ```
 
 Below is a screenshot of the settings used in TablePlus:
@@ -704,17 +885,45 @@ The MongoDB Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# MongoDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-MONGO_CONTAINER_NAME="${APP_NAME}_mongodb"
+# The project name. | default: mongodb
+APP_NAME="mongodb"
 
-MONGO_DATABASE="${DB_DATABASE}"
+#--------------------------------------------------------------------------
+# Database (MongoDB) env
+#--------------------------------------------------------------------------
 
-MONGO_PORT=27017
+# The MongoDB database container name. | default: mongodb
+DB_CONTAINER_NAME="${APP_NAME}"
 
-MONGO_USERNAME="${DB_USERNAME}"
-MONGO_PASSWORD="${DB_PASSWORD}"
+# The MariaDB database configuration. | default: local
+DB_DATABASE=local
+
+# The MongoDB database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 27017
+DB_PORT=27017
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container config volume. | default: mongodb_config
+DB_VOLUME_CONFIG_NAME="${DB_CONTAINER_NAME}_config"
+
+# The database container data volume. | default: mongodb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** You are unable to create additional users via the MongoDB 
@@ -730,13 +939,17 @@ page.
 To start the MongoDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.mongodb.yaml up -d
+# Navigate to MongoDB database.
+$ cd databases/mongodb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the MongoDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.mongodb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -745,7 +958,7 @@ To connect to your MongoDB container from your database client, you will
 need to provide the following settings:
 
 ```ini
-URL=mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@localhost:${MONGO_PORT}/
+URL=mongodb://${DB_USERNAME}:${DB_PASSWORD}@localhost:${DB_PORT}/
 ```
 
 Below is a screenshot of the settings used in TablePlus:
@@ -783,16 +996,41 @@ The MSSQL Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# Microsoft SQL Server (MSSQL) env
+# Docker env
 #--------------------------------------------------------------------------
 
-MSSQL_CONTAINER_NAME="${APP_NAME}_mssql"
+# The project name. | default: mssql
+APP_NAME="mssql"
 
-MSSQL_PORT=1433
+#--------------------------------------------------------------------------
+# Database (Microsoft SQL Server - MSSQL) env
+#--------------------------------------------------------------------------
 
-MSSQL_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+# The MSSQL database container name. | default: mssql_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
 
+# The MSSQL database root credentials.
+DB_ROOT_PASSWORD=""
+
+# The Product ID (PID) or Edition | default: Developer
 MSSQL_PID="Developer"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 1433
+DB_PORT=1433
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: mssql_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** The MSSQL password needs to include at least 8 characters of 
@@ -808,13 +1046,17 @@ page.
 To start the MSSQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.mssql.yaml up -d
+# Navigate to MSSQL database.
+$ cd databases/mssql
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the MSSQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.mssql.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -824,10 +1066,10 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${MSSQL_PORT}"
+PORT="${DB_PORT}"
 
 USER="sa"
-PASSWORD="${MSSQL_ROOT_PASSWORD}"
+PASSWORD="${DB_ROOT_PASSWORD}"
 ```
 
 **Please note:** The `SA` user is the system administrator account on the MSSQL 
@@ -864,19 +1106,45 @@ The MySQL Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# MySQL env
+# Docker env
 #--------------------------------------------------------------------------
 
-MYSQL_CONTAINER_NAME="${APP_NAME}_mysql"
+# The project name. | default: mysql
+APP_NAME="mysql"
 
-MYSQL_DATABASE="${DB_DATABASE}"
+#--------------------------------------------------------------------------
+# Database (MySQL) env
+#--------------------------------------------------------------------------
 
-MYSQL_PORT="${DB_PORT}"
+# The MySQL database container name. | default: mysql_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
 
-MYSQL_ROOT_PASSWORD="${DB_ROOT_PASSWORD}"
+# The MySQL database configuration. | default: local
+DB_DATABASE="local"
 
-MYSQL_USERNAME="${DB_USERNAME}"
-MYSQL_PASSWORD="${DB_PASSWORD}"
+# The MySQL database root credentials.
+DB_ROOT_PASSWORD=""
+
+# The MySQL database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 3306
+DB_PORT=3306
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: mysql_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** MySQL allows root's password to be empty.
@@ -890,13 +1158,17 @@ page.
 To start the MySQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.mysql.yaml up -d
+# Navigate to MySQL database.
+$ cd databases/mysql
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the MySQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.mysql.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -906,10 +1178,10 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${MYSQL_PORT}"
+PORT="${DB_PORT}"
 
-USER="${MYSQL_USERNAME}"
-PASSWORD="${MYSQL_PASSWORD}"
+USER="${DB_USERNAME}"
+PASSWORD="${DB_PASSWORD}"
 ```
 
 Below is a screenshot of the settings used in TablePlus:
@@ -947,14 +1219,41 @@ The Neo4j Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# Neo4j env
+# Docker env
 #--------------------------------------------------------------------------
 
-NEO4J_CONTAINER_NAME="${APP_NAME}_neo4j"
+# The project name. | default: neo4j
+APP_NAME="neo4j"
 
-NEO4J_PORT=7474
+#--------------------------------------------------------------------------
+# Database (Neo4j) env
+#--------------------------------------------------------------------------
 
-NEO4J_BOLT_PORT=7687
+# The Neo4j database container name. | default: neo4j_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 7474
+DB_PORT=7474
+
+# Map the database container exposed port to the host port. | default: 7687
+DB_BOLT_PORT=7687
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: neo4j_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
+
+# The database container logs volume. | default: neo4j_db_logs
+DB_VOLUME_LOGS_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 Neo4j configuration settings can be provided in the Neo4j Docker Compose file 
@@ -984,13 +1283,17 @@ page.
 To start the Neo4j container, you can run the following command:
 
 ```bash
-docker compose -f compose.neo4j.yaml up -d
+# Navigate to Neo4j database.
+$ cd databases/neo4j
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the Neo4j container, you can run the following command:
 
 ```bash
-docker compose -f compose.neo4j.yaml down
+docker compose down
 ```
 
 ##### **Connect to Database**
@@ -1001,7 +1304,7 @@ browser, you will need to provide the following settings:
 
 ```ini
 HOST=localhost
-PORT="${NEO4J_PORT}"
+PORT="${DB_PORT}"
 
 USER="neo4j"
 PASSWORD="neo4j"
@@ -1040,17 +1343,42 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# PostgreSQL env
+# Docker env
 #--------------------------------------------------------------------------
 
-PGSQL_CONTAINER_NAME="${APP_NAME}_pgsql"
+# The project name. | default: pgsql
+APP_NAME="pgsql"
 
-PGSQL_DATABASE="${DB_DATABASE}"
+#--------------------------------------------------------------------------
+# Database (PostgreSQL) env
+#--------------------------------------------------------------------------
 
-PGSQL_PORT=5432
+# The PostgreSQL database container name. | default: pgsql_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
 
-PGSQL_USERNAME="${DB_USERNAME}"
-PGSQL_PASSWORD="${DB_PASSWORD}"
+# The PostgreSQL database configuration. | default: local
+DB_DATABASE="local"
+
+# The PostgreSQL database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 5432
+DB_PORT=5432
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: pgsql_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 For a list of available environment variables that the PostgreSQL Docker image 
@@ -1062,13 +1390,17 @@ page.
 To start the PostgreSQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.pgsql.yaml up -d
+# Navigate to PostgreSQL database.
+$ cd databases/pgsql
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the PostgreSQL container, you can run the following command:
 
 ```bash
-docker compose -f compose.pgsql.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -1078,12 +1410,12 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${PGSQL_PORT}"
+PORT="${DB_PORT}"
 
-USER="${PGSQL_USERNAME}"
-PASSWORD="${PGSQL_PASSWORD}"
+USER="${DB_USERNAME}"
+PASSWORD="${DB_PASSWORD}"
 
-DATABASE="${PGSQL_DATABASE}"
+DATABASE="${DB_DATABASE}"
 ```
 
 Below is a screenshot of the settings used in TablePlus:
@@ -1121,12 +1453,35 @@ The Redis Docker Compose file uses the follow variables from the DotEnv file.
 
 ```ini
 #--------------------------------------------------------------------------
-# Redis env
+# Docker env
 #--------------------------------------------------------------------------
 
-REDIS_CONTAINER_NAME="${APP_NAME}_redis"
+# The project name. | default: redis
+APP_NAME="redis"
 
-REDIS_PORT=6379
+#--------------------------------------------------------------------------
+# Database (Redis) env
+#--------------------------------------------------------------------------
+
+# The Redis database container name. | default: redis_db
+DB_CONTAINER_NAME="${APP_NAME}_db"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 6379
+DB_PORT=6379
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: redis_db_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** The Redis Docker image doesn't offer additional environment 
@@ -1137,13 +1492,17 @@ variables.
 To start the Redis container, you can run the following command:
 
 ```bash
-docker compose -f compose.redis.yaml up -d
+# Navigate to Redis database.
+$ cd databases/redis
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the Redis container, you can run the following command:
 
 ```bash
-docker compose -f compose.redis.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -1153,7 +1512,7 @@ need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${REDIS_PORT}"
+PORT="${DB_PORT}"
 ```
 
 Below is a screenshot of the settings used in TablePlus:
@@ -1191,15 +1550,39 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# SurrealDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-SURREALDB_CONTAINER_NAME="${APP_NAME}_surrealdb"
+# The project name. | default: surrealdb
+APP_NAME="surrealdb"
 
-SURREALDB_PORT=8000
+#--------------------------------------------------------------------------
+# Database (SurrealDB) env
+#--------------------------------------------------------------------------
 
-SURREALDB_USERNAME="${DB_USERNAME}"
-SURREALDB_PASSWORD="${DB_PASSWORD}"
+# The SurrealDB database container name. | default: surrealdb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+# The SurrealDB database user credentials.
+DB_USERNAME=""
+DB_PASSWORD=""
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container exposed port to the host port. | default: 8000
+DB_PORT=8000
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: surrealdb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** The SurrealDB Docker image doesn't offer additional environment 
@@ -1210,13 +1593,17 @@ variables.
 To start the SurrealDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.surrealdb.yaml up -d
+# Navigate to SurrealDB database.
+$ cd databases/surrealdb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the SurrealDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.surrealdb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database**
@@ -1228,10 +1615,10 @@ queries on SurrealDB.
 You will need to provide the following settings for your HTTP Request:
 
 ```ini
-PORT="${SURREALDB_PORT}"
+PORT="${DB_PORT}"
 
-USER="${SURREALDB_USERNAME}"
-PASSWORD="${SURREALDB_PASSWORD}"
+USER="${DB_USERNAME}"
+PASSWORD="${DB_PASSWORD}"
 ```
 
 Below is a cURL request using the settings:
@@ -1241,9 +1628,9 @@ curl --request POST \
 	--header "Content-Type: application/json" \
 	--header "NS: test" \
 	--header "DB: test" \
-	--user "${USERNAME}:${PASSWORD}" \
+	--user "${DB_USERNAME}:${DB_PASSWORD}" \
 	--data "INFO FOR DB;" \
-	http://localhost:${PORT}/sql
+	http://localhost:${DB_PORT}/sql
 ```
 
 Below is a screenshot of the settings used in Postman:
@@ -1282,16 +1669,44 @@ file.
 
 ```ini
 #--------------------------------------------------------------------------
-# YugabyteDB env
+# Docker env
 #--------------------------------------------------------------------------
 
-YUGABYTEDB_CONTAINER_NAME="${APP_NAME}_yugabytedb"
+# The project name. | default: yugabytedb
+APP_NAME="yugabytedb"
 
-YUGABYTEDB_YSQL_PORT=5433
-YUGABYTEDB_YCQL_PORT=9042
+#--------------------------------------------------------------------------
+# Database (YugabyteDB) env
+#--------------------------------------------------------------------------
 
-YUGABYTEDB_MASTER_PORT=7001
-YUGABYTEDB_TSERVER_PORT=9000
+# The YugabyteDB database container name. | default: yugabytedb
+DB_CONTAINER_NAME="${APP_NAME}"
+
+#--------------------------------------------------------------------------
+# Network env
+#--------------------------------------------------------------------------
+
+# Map the database container PostgreSQL port to the host port. | default: 5433
+DB_YSQL_PORT=5433
+
+# Map the database container Cassandra port to the host port. | default: 9042
+DB_YCQL_PORT=9042
+
+# Map the database container Admin UI port to the host port. | default: 7001
+DB_MASTER_PORT=7001
+
+# Map the database container Admin UI port to the host port. | default: 9000
+DB_TSERVER_PORT=9000
+
+# The Docker network for the containers. | default: local_dbs_network
+NETWORK_NAME="local_dbs_network"
+
+#--------------------------------------------------------------------------
+# Volume env
+#--------------------------------------------------------------------------
+
+# The database container data volume. | default: yugabytedb_data
+DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
 **Please note:** The YugabyteDB Docker image doesn't offer additional 
@@ -1306,13 +1721,17 @@ listens on port 7000. This conflicts with YugabyteDB default YB-Master port.
 To start the YugabyteDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.yugabytedb.yaml up -d
+# Navigate to YugabyteDB database.
+$ cd databases/yugabytedb
+
+# Run Docker Compose command.
+$ docker compose up -d
 ```
 
 To stop the YugabyteDB container, you can run the following command:
 
 ```bash
-docker compose -f compose.yugabytedb.yaml down
+$ docker compose down
 ```
 
 ##### **Connect to Database (Admin UI)**
@@ -1334,7 +1753,7 @@ PostgreSQL settings, you will need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${YUGABYTEDB_YSQL_PORT}"
+PORT="${DB_YSQL_PORT}"
 
 USER="yugabyte"
 PASSWORD="yugabyte"
@@ -1363,7 +1782,7 @@ Cassandra settings, you will need to provide the following settings:
 
 ```ini
 HOST=127.0.0.1
-PORT="${YUGABYTEDB_YCQL_PORT}"
+PORT="${DB_YCQL_PORT}"
 
 USER="cassandra"
 PASSWORD="cassandra"
@@ -1415,7 +1834,7 @@ services:
     image: python:3
     # (Optional) depends on database container name
     depends_on:
-      - local_dbs_mongodb
+      - mongodb
     # Add local_dbs_network as attached network.
     networks:
       - local_dbs_network

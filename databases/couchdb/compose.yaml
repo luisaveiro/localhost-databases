@@ -6,23 +6,26 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The CockroachDB database container.
-  cockroachdb:
-    # https://hub.docker.com/r/cockroachdb/cockroach
-    image: cockroachdb/cockroach:latest
-    container_name: "${COCKROACHDB_CONTAINER_NAME:-cockroachdb}"
+  # The couchDB database container.
+  couchdb:
+    # https://hub.docker.com/_/couchdb
+    image: couchdb:latest
+    container_name: "${DB_CONTAINER_NAME:-couchdb}"
+    environment:
+      COUCHDB_USER: "${DB_USERNAME}"
+      COUCHDB_PASSWORD: "${DB_PASSWORD}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${COCKROACHDB_PORT:-26257}:26257
-    # Admin UI
-     - ${COCKROACHDB_UI_PORT:-8080}:8080
+     - ${DB_PORT:-5984}:5984
     volumes:
-      - cockroachdb_data:/cockroach/cockroach-data
-    command: ["start-single-node", "--insecure"]
+      - couchdb_data:/opt/couchdb/data
 
 # The Docker networks.
 networks:
@@ -32,6 +35,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  cockroachdb_data:
+  couchdb_data:
     driver: "local"
-    name: "${COCKROACHDB_CONTAINER_NAME:-cockroachdb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-couchdb_data}"

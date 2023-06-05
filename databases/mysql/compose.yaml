@@ -6,22 +6,25 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
   # The MySQL database container.
   mysql:
     # https://hub.docker.com/_/mysql
     image: mysql:latest
-    container_name: "${MYSQL_CONTAINER_NAME:-mysql}"
+    container_name: "${DB_CONTAINER_NAME:-mysql_db}"
     environment:
       MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
-      MYSQL_USER: "${MYSQL_USERNAME}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE:-local}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_ROOT_PASSWORD}"]
       retries: 3
       timeout: 5s
     networks:
@@ -30,9 +33,9 @@ services:
     platform: linux/x86_64
     # Map the database container exposed port to the host port.
     ports:
-     - ${MYSQL_PORT:-3306}:3306
+     - ${DB_PORT:-3306}:3306
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_db_data:/var/lib/mysql
     # Use mysql_native_password instead of caching_sha2_password
     # command: "--default-authentication-plugin=mysql_native_password"
 
@@ -44,6 +47,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  mysql_data:
+  mysql_db_data:
     driver: "local"
-    name: "${MYSQL_CONTAINER_NAME:-mysql}_data"
+    name: "${DB_VOLUME_DATA_NAME:-mysql_db_data}"

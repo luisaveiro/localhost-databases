@@ -6,23 +6,27 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The couchDB database container.
-  couchdb:
-    # https://hub.docker.com/_/couchdb
-    image: couchdb:latest
-    container_name: "${COUCHDB_CONTAINER_NAME:-couchdb}"
-    environment:
-      COUCHDB_USER: "${COUCHDB_USERNAME}"
-      COUCHDB_PASSWORD: "${COUCHDB_PASSWORD}"
+  # The Redis database container.
+  redis:
+    # https://hub.docker.com/_/redis
+    image: redis:alpine
+    container_name: "${DB_CONTAINER_NAME:-redis_db}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${COUCHDB_PORT:-5984}:5984
+      - ${DB_PORT:-6379}:6379
     volumes:
-      - couchdb_data:/opt/couchdb/data
+      - redis_db_data:/data
 
 # The Docker networks.
 networks:
@@ -32,6 +36,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  couchdb_data:
+  redis_db_data:
     driver: "local"
-    name: "${COUCHDB_CONTAINER_NAME:-couchdb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-redis_db_data}"

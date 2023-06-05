@@ -6,23 +6,23 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The DynamoDB local database container.
-  dynamodb:
-    # https://hub.docker.com/r/amazon/dynamodb-local
-    image: amazon/dynamodb-local:latest
-    container_name: "${DYNAMODB_CONTAINER_NAME:-dynamodb}"
+  # The Cassandra database container.
+  cassandra:
+    # https://hub.docker.com/_/cassandra
+    image: cassandra:latest
+    container_name: "${DB_CONTAINER_NAME:-cassandra_db}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${DYNAMODB_PORT:-8000}:8000
-    user: root
+     - ${DB_PORT:-9042}:9042
     volumes:
-      - dynamodb_data:/home/dynamodblocal/data
-    working_dir: /home/dynamodblocal
-    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "./data"]
+      - cassandra_db_data:/var/lib/cassandra
 
 # The Docker networks.
 networks:
@@ -32,6 +32,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  dynamodb_data:
+  cassandra_db_data:
     driver: "local"
-    name: "${DYNAMODB_CONTAINER_NAME:-dynamodb}_data"
+    name: "${DB_VOLUME_DATA_NAME:-cassandra_db_data}"

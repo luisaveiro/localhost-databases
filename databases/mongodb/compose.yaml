@@ -6,31 +6,32 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The MariaDB database container.
-  mariadb:
-    # https://hub.docker.com/_/mariadb
-    image: mariadb:latest
-    container_name: "${MARIADB_CONTAINER_NAME:-mariadb}"
+  # The MongoDB database container.
+  mongodb:
+    # https://hub.docker.com/_/mongo
+    image: mongo:latest
+    container_name: "${DB_CONTAINER_NAME:-mongodb}"
     environment:
-      MARIADB_ROOT_HOST: "%"
-      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
-      MARIADB_DATABASE: "${MARIADB_DATABASE}"
-      MARIADB_USER: "${MARIADB_USERNAME}"
-      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+      MONGO_INITDB_DATABASE: "${DB_DATABASE:-local}"
+      MONGO_INITDB_ROOT_USERNAME: "${DB_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-p${MARIADB_ROOT_PASSWORD}"]
+      test: echo 'db.runCommand("ping").ok' | mongo mongodb:27017/test --quiet
       retries: 3
       timeout: 5s
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${MARIADB_PORT:-3306}:3306
+      - ${DB_PORT:-27017}:27017
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mongodb_config:/data/configdb
+      - mongodb_data:/data/db
 
 # The Docker networks.
 networks:
@@ -40,6 +41,9 @@ networks:
 
 # The Docker volumes.
 volumes:
-  mariadb_data:
+  mongodb_config:
     driver: "local"
-    name: "${MARIADB_CONTAINER_NAME:-mariadb}_data"
+    name: "${DB_VOLUME_CONFIG_NAME:-mongodb_config}"
+  mongodb_data:
+    driver: "local"
+    name: "${DB_VOLUME_DATA_NAME:-mongodb_data}"

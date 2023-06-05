@@ -6,23 +6,26 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The Microsoft SQL database container.
-  mssql:
-    # https://hub.docker.com/_/microsoft-mssql-server
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: "${MSSQL_CONTAINER_NAME:-mssql}"
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "${MSSQL_ROOT_PASSWORD}"
+  # The DynamoDB local database container.
+  dynamodb:
+    # https://hub.docker.com/r/amazon/dynamodb-local
+    image: amazon/dynamodb-local:latest
+    container_name: "${DB_CONTAINER_NAME:-dynamodb}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${MSSQL_PORT:-1433}:1433
+     - ${DB_PORT:-8000}:8000
+    user: root
     volumes:
-      - mssql_data:/var/opt/mssql
+      - dynamodb_data:/home/dynamodblocal/data
+    working_dir: /home/dynamodblocal
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "./data"]
 
 # The Docker networks.
 networks:
@@ -32,6 +35,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  mssql_data:
+  dynamodb_data:
     driver: "local"
-    name: "${MSSQL_CONTAINER_NAME:-mssql}_data"
+    name: "${DB_VOLUME_DATA_NAME:-dynamodb_data}"

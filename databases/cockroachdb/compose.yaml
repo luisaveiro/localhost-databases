@@ -6,32 +6,26 @@
 # Docker compose version https://docs.docker.com/compose/compose-file
 version: "3.9"
 
+# Sets the project name.
+name: localhost-databases
+
 # The Docker services.
 services:
-  # The PostgreSQL database container.
-  pgsql:
-    # https://hub.docker.com/_/postgres
-    image: postgres:latest
-    container_name: "${PGSQL_CONTAINER_NAME:-pgsql}"
-    environment:
-      POSTGRES_USER: "${PGSQL_USERNAME}"
-      POSTGRES_PASSWORD: "${PGSQL_PASSWORD}"
-      POSTGRES_DB: "${PGSQL_DATABASE}"
-    healthcheck:
-      test: [
-        "CMD", "pg_isready", "-q",
-        "-d", "${PGSQL_DATABASE}",
-        "-U", "${PGSQL_USERNAME}"
-      ]
-      retries: 3
-      timeout: 5s
+  # The CockroachDB database container.
+  cockroachdb:
+    # https://hub.docker.com/r/cockroachdb/cockroach
+    image: cockroachdb/cockroach:latest
+    container_name: "${DB_CONTAINER_NAME:-cockroachdb}"
     networks:
       - local
     # Map the database container exposed port to the host port.
     ports:
-     - ${PGSQL_PORT:-5432}:5432
+     - ${DB_PORT:-26257}:26257
+    # Admin UI
+     - ${DB_UI_PORT:-8080}:8080
     volumes:
-      - pgsql_data:/var/lib/postgresql/data
+      - cockroachdb_data:/cockroach/cockroach-data
+    command: ["start-single-node", "--insecure"]
 
 # The Docker networks.
 networks:
@@ -41,6 +35,6 @@ networks:
 
 # The Docker volumes.
 volumes:
-  pgsql_data:
+  cockroachdb_data:
     driver: "local"
-    name: "${PGSQL_CONTAINER_NAME:-pgsql}_data"
+    name: "${DB_VOLUME_DATA_NAME:-cockroachdb_data}"

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.7.1] - 2023-06-18
+### Fixed
+- Docblock for DotEnv examples.
+
 ## [v0.7.0] - 2023-06-05
 ### Changed
 - Moved each database Docker Compose YAML file into `databases` directory.

@@ -75,11 +75,11 @@ body:
 
         examples:
           - **OS**: MacOS 13.5.2
-          - **Localhost Databases tag**: 0.15.0
+          - **Localhost Databases version**: 0.15.0
           - **Database**: MySQL 8.2.0
       value: |
         - OS:
-        - Localhost Databases tag:
+        - Localhost Databases version:
         - Database:
       render: markdown
     validations:

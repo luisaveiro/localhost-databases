@@ -22,9 +22,11 @@ services:
      - ${DB_PORT:-8000}:8000
     volumes:
       - surrealdb_data:/data/db
+    user: root
     command: [
       "start",
       "--log", "full",
+      "--auth",
       "--user", "${DB_USERNAME}",
       "--pass", "${DB_PASSWORD}",
       "file:/data/db"

@@ -28,13 +28,13 @@
 database for global, internet-scale apps that need absolute data correctness. 
 It aims to support all PostgreSQL features.
 
-> **Note**  
+> [!TIP]  
 > YugabyteDB supports PostgreSQL and Cassandra authentication and connection.
 
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -137,12 +137,12 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]  
 > The YugabyteDB Docker image doesn't offer additional environment variables. 
 You are unable to create additional users via the YugabyteDB Docker image 
 environment variables.
 
-> **Note**  
+> [!WARNING]  
 > MacOS Monterey enables AirPlay receiving by default, which listens on port 
 7000. This conflicts with YugabyteDB default YB-Master port.
 
@@ -208,7 +208,7 @@ USER="yugabyte"
 PASSWORD="yugabyte"
 ```
 
-> **Note**  
+> [!NOTE]  
 > The `yugabyte` user is the system administrator account on the YugabyteDB 
 Server instance that's created during setup.
 
@@ -240,7 +240,7 @@ USER="cassandra"
 PASSWORD="cassandra"
 ```
 
-> **Note**  
+> [!NOTE]  
 > The `cassandra` user is the system administrator account on the YugabyteDB 
 Server instance that's created during setup.
 

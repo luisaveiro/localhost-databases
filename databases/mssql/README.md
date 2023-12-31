@@ -27,13 +27,13 @@
 [Microsoft SQL Server (MSSQL)](https://www.microsoft.com/en-gb/sql-server/) is a 
 relational database management system developed by Microsoft.
 
-> **Note**
+> [!WARNING]  
 > : MSSQL is not support on Apple Silicon. There is an open 
 [GitHub issue](https://github.com/microsoft/mssql-docker/issues/734).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -133,7 +133,7 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]  
 > The MSSQL password needs to include at least 8 characters of 
 at least three of these four categories: uppercase letters, lowercase letters, 
 numbers and non-alphanumeric symbols.
@@ -192,7 +192,7 @@ USER="sa"
 PASSWORD="${DB_ROOT_PASSWORD}"
 ```
 
-> **Note**  
+> [!TIP]  
 > The `SA` user is the system administrator account on the MSSQL Server instance 
 that's created during setup.
 

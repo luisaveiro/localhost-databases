@@ -33,7 +33,7 @@ watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -127,7 +127,7 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]    
 > The Redis Docker image doesn't offer additional environment variables.
 
 #### 2. **Start Docker container**

@@ -33,7 +33,7 @@ watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -137,7 +137,7 @@ DB_VOLUME_CONFIG_NAME="${DB_CONTAINER_NAME}_config"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]  
 > You are unable to create additional users via the MongoDB 
 Docker image environment variables. The Mongo username and password environment 
 variables in the DotEnv are for the root user.

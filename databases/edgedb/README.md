@@ -30,7 +30,7 @@ query engine.
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -130,7 +130,7 @@ DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 DB_VOLUME_SCHEMA_NAME="${DB_CONTAINER_NAME}_schema"
 ```
 
-> **Note**  
+> [!TIP]  
 > EdgeDB root username is `edgedb`.
 
 For a list of available environment variables that the EdgeDB Docker image 

@@ -29,7 +29,7 @@ relational database management system (RDBMS).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -133,7 +133,7 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]   
 > MySQL allows root's password to be empty.
 
 For a list of available environment variables that the MySQL Docker image 

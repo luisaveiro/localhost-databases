@@ -29,7 +29,7 @@ standard SQL for cloud applications.
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -175,7 +175,7 @@ PORT="${DB_PORT}"
 USER="root"
 ```
 
-> **Note**  
+> [!TIP]  
 > The CockroachDB root user does not have a password.
 
 ##### Expected result

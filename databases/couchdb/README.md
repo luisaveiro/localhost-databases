@@ -31,7 +31,7 @@ as its query language using MapReduce, and HTTP for an API.
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 

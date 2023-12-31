@@ -33,7 +33,7 @@ watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 

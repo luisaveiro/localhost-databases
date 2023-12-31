@@ -35,7 +35,7 @@ watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -129,7 +129,7 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]  
 > You are unable to create additional users via the Cassandra Docker image 
 environment variables.
 
@@ -183,7 +183,7 @@ USER="cassandra"
 PASSWORD="cassandra"
 ```
 
-> **Note**  
+> [!TIP]  
 > The `cassandra` user is the system administrator account on the Cassandra 
 Server instance that's created during setup.
 

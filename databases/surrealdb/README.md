@@ -32,7 +32,7 @@ watching [Fireship YouTube channel](https://www.youtube.com/@Fireship).
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT]  
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -130,7 +130,7 @@ NETWORK_NAME="local_dbs_network"
 DB_VOLUME_DATA_NAME="${DB_CONTAINER_NAME}_data"
 ```
 
-> **Note**  
+> [!NOTE]   
 > The SurrealDB Docker image doesn't offer additional environment variables.
 
 #### 2. **Start Docker container**
@@ -172,7 +172,7 @@ $ docker compose down
 
 #### 4. **Connect to Database**
 
-> **Note**  
+> [!NOTE]    
 > TablePlus currently doesn't support SurrealDB. You can use Postman to run queries on SurrealDB.
 
 To connect to your SurrealDB container from you HTTP request, you will need to 

@@ -32,7 +32,7 @@ DynamoDB web service.
 
 ## Disclaimer
 
-> **Note**  
+> [!IMPORTANT] 
 > ***Localhost Databases*** is not affiliated with the databases' 
 developers/owners and is not an official product.
 
@@ -165,7 +165,7 @@ $ docker compose down
 
 #### 4. **Connect to Database**
 
-> **Note**  
+> [!NOTE]   
 > TablePlus currently doesn't support DynamoDB. You can use NoSQL Workbench.
 
 To connect to your DynamoDB container from your database client, you will 
